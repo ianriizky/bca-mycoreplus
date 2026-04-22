@@ -110,7 +110,7 @@ Grade:                   {grade}
 ```typescript
 // ❌ Bad (current implementation)
 {
-  code_snippet_showing_problem;
+  code_snippet_showing_problem
 }
 ```
 
@@ -119,7 +119,7 @@ Grade:                   {grade}
 ```typescript
 // ✅ Good (recommended approach)
 {
-  code_snippet_showing_solution;
+  code_snippet_showing_solution
 }
 ```
 
@@ -152,7 +152,7 @@ Grade:                   {grade}
 ```typescript
 // ⚠️ Could be improved (current implementation)
 {
-  code_snippet_showing_current_approach;
+  code_snippet_showing_current_approach
 }
 ```
 
@@ -161,7 +161,7 @@ Grade:                   {grade}
 ```typescript
 // ✅ Better approach (recommended)
 {
-  code_snippet_showing_improvement;
+  code_snippet_showing_improvement
 }
 ```
 
@@ -193,7 +193,7 @@ Grade:                   {grade}
 ```typescript
 // ✅ Excellent pattern demonstrated in this test
 {
-  code_snippet_showing_best_practice;
+  code_snippet_showing_best_practice
 }
 ```
 

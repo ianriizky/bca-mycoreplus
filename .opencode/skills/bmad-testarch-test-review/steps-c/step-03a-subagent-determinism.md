@@ -64,7 +64,7 @@ This is an **isolated subagent** running in parallel with other quality dimensio
 For each test file from Step 2:
 
 ```javascript
-const violations = [];
+const violations = []
 
 // Check for Math.random()
 if (testFileContent.includes('Math.random()')) {
@@ -75,19 +75,23 @@ if (testFileContent.includes('Math.random()')) {
     category: 'random-generation',
     description: 'Test uses Math.random() - non-deterministic',
     suggestion: 'Use faker.seed(12345) for deterministic random data',
-  });
+  })
 }
 
 // Check for Date.now()
-if (testFileContent.includes('Date.now()') || testFileContent.includes('new Date()')) {
+if (
+  testFileContent.includes('Date.now()') ||
+  testFileContent.includes('new Date()')
+) {
   violations.push({
     file: testFile,
     line: findLineNumber('Date.now()'),
     severity: 'HIGH',
     category: 'time-dependency',
     description: 'Test uses Date.now() or new Date() without mocking',
-    suggestion: 'Mock system time with test.useFakeTimers() or use fixed timestamps',
-  });
+    suggestion:
+      'Mock system time with test.useFakeTimers() or use fixed timestamps',
+  })
 }
 
 // Check for hard waits
@@ -98,8 +102,9 @@ if (testFileContent.includes('waitForTimeout')) {
     severity: 'MEDIUM',
     category: 'hard-wait',
     description: 'Test uses waitForTimeout - creates flakiness',
-    suggestion: 'Replace with expect(locator).toBeVisible() or interceptNetworkCall-based network waits',
-  });
+    suggestion:
+      'Replace with expect(locator).toBeVisible() or interceptNetworkCall-based network waits',
+  })
 }
 
 // ... check other patterns
@@ -110,16 +115,19 @@ if (testFileContent.includes('waitForTimeout')) {
 **Scoring Logic**:
 
 ```javascript
-const totalChecks = testFiles.length * checksPerFile;
-const failedChecks = violations.length;
-const passedChecks = totalChecks - failedChecks;
+const totalChecks = testFiles.length * checksPerFile
+const failedChecks = violations.length
+const passedChecks = totalChecks - failedChecks
 
 // Weight violations by severity
-const severityWeights = { HIGH: 10, MEDIUM: 5, LOW: 2 };
-const totalPenalty = violations.reduce((sum, v) => sum + severityWeights[v.severity], 0);
+const severityWeights = { HIGH: 10, MEDIUM: 5, LOW: 2 }
+const totalPenalty = violations.reduce(
+  (sum, v) => sum + severityWeights[v.severity],
+  0,
+)
 
 // Score: 100 - (penalty points)
-const score = Math.max(0, 100 - totalPenalty);
+const score = Math.max(0, 100 - totalPenalty)
 ```
 
 ---

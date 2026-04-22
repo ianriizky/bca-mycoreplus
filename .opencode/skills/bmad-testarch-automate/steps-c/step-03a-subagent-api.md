@@ -54,7 +54,7 @@ For each API endpoint, create test file in `tests/api/[feature].spec.ts`:
 **Test Structure:**
 
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
 // If Playwright Utils enabled:
 // import { apiRequest } from '@playwright-utils/api';
 
@@ -66,18 +66,18 @@ test.describe('[Feature] API Tests', () => {
       data: {
         /* test data */
       },
-    });
+    })
 
-    expect(response.status()).toBe(200);
+    expect(response.status()).toBe(200)
     expect(await response.json()).toMatchObject({
       /* expected */
-    });
-  });
+    })
+  })
 
   test('[P1] should handle [error scenario]', async ({ request }) => {
     // Test error handling
-  });
-});
+  })
+})
 ```
 
 **Requirements:**
@@ -206,9 +206,17 @@ Write JSON to temp file: `/tmp/tea-automate-api-tests-{{timestamp}}.json`
     }
   ],
   "fixture_needs": ["authToken", "userDataFactory", "productDataFactory"],
-  "knowledge_fragments_used": ["api-request", "data-factories", "api-testing-patterns"],
+  "knowledge_fragments_used": [
+    "api-request",
+    "data-factories",
+    "api-testing-patterns"
+  ],
   "provider_scrutiny": "completed",
-  "provider_files_read": ["server/src/routes/authHandlers.ts", "server/src/routes/checkoutHandlers.ts", "server/src/types/auth.ts"],
+  "provider_files_read": [
+    "server/src/routes/authHandlers.ts",
+    "server/src/routes/checkoutHandlers.ts",
+    "server/src/types/auth.ts"
+  ],
   "test_count": 12,
   "summary": "Generated 12 API test cases covering 3 features"
 }
