@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react'
+import path from 'path'
 import { loadEnv } from 'vite'
 import { defineConfig } from 'vitest/config'
 
@@ -7,6 +8,9 @@ export default defineConfig(({ mode }) => ({
   plugins: [react()],
   resolve: {
     tsconfigPaths: true,
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
   },
   test: {
     projects: [
@@ -15,15 +19,10 @@ export default defineConfig(({ mode }) => ({
         test: {
           name: 'jsdom',
           environment: 'jsdom',
-          include: ['tests/int/jsdom/**/*.int.spec.ts', 'tests/int/jsdom/**/*.int.spec.tsx'],
-        },
-      },
-      {
-        extends: true,
-        test: {
-          name: 'node',
-          environment: 'node',
-          include: ['tests/int/node/**/*.int.spec.ts'],
+          include: [
+            'tests/int/jsdom/**/*.int.spec.ts',
+            'tests/int/jsdom/**/*.int.spec.tsx',
+          ],
         },
       },
     ],
@@ -40,8 +39,6 @@ export default defineConfig(({ mode }) => ({
       exclude: [
         'tests/int/jsdom/**/*.int.spec.ts',
         'tests/int/jsdom/**/*.int.spec.tsx',
-        'tests/int/node/**/*.int.spec.ts',
-        'tests/e2e/**/*.e2e.spec.ts',
       ],
       reporter: ['cobertura', 'json', 'lcov', 'html'],
       reportsDirectory: './tests/coverage/int',

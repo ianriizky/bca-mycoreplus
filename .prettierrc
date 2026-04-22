@@ -9,8 +9,8 @@
   ],
   "plugins": ["prettier-plugin-tailwindcss"],
 
+  "bracketSpacing": true,
   "endOfLine": "lf",
-  "printWidth": 100,
   "semi": false,
   "singleQuote": true,
   "tabWidth": 2,
