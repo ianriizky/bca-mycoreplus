@@ -1,0 +1,61 @@
+{
+  "name": "bca-mycoreplus",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Web application for BCA MyCore+.",
+  "author": {
+    "name": "Septianata Rizky Pratama",
+    "email": "ian.rizkypratama@gmail.com"
+  },
+  "private": true,
+  "license": "MIT",
+  "engineStrict": true,
+  "engines": {
+    "bun": "^1.3.13"
+  },
+  "packageManager": "bun@1.3.13",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ianriizky/bca-mycoreplus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ianriizky/bca-mycoreplus/issues"
+  },
+  "homepage": "https://github.com/ianriizky/bca-mycoreplus/blob/main/README.md",
+  "scripts": {
+    "build": "echo 'build'",
+    "postbuild": "echo 'postbuild'",
+    "start:dev": "echo 'start:dev'",
+    "start:prod": "echo 'start:prod'",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --write",
+    "test": "bun run test:int",
+    "test:int": "vitest run",
+    "test:cov": "bun run test:int:cov",
+    "test:int:cov": "vitest run --coverage",
+    "test:int:show-report": "vite preview --outDir ./tests/output/int/html"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
+    "@eslint/js": "^10.0.1",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "^4.1.5",
+    "@vitest/ui": "^4.1.5",
+    "bun-types": "^1.3.13",
+    "eslint": "^10.2.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-sort-exports": "^0.9.1",
+    "jsdom": "^29.0.2",
+    "prettier": "^3.8.3",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "tailwindcss": "^4.2.4",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.0",
+    "vite": "^8.0.9",
+    "vitest": "^4.1.5"
+  }
+}

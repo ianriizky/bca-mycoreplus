@@ -1,0 +1,10 @@
+/build
+/dist
+/node_modules
+.DS_Store
+.env
+tsconfig.tsbuildinfo
+
+# tests coverage & output file
+/tests/coverage
+/tests/output

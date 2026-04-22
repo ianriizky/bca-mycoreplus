@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "bradlc.vscode-tailwindcss",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "editorconfig.editorconfig",
+    "github.vscode-github-actions",
+    "oven.bun-vscode",
+    "ReprEng.csv",
+    "yzhang.markdown-all-in-one"
+  ]
+}
