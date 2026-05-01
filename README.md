@@ -29,6 +29,8 @@ Web application for BCA MyCore+.
 ## Tech stack
 
 - [![TypeScript](https://img.shields.io/badge/TypeScript%206.0.3-007ACC?logo=typescript&logoColor=white 'TypeScript')](https://www.typescriptlang.org)
+- [![React](https://img.shields.io/badge/React%2019.2.5-61DAFB?logo=react&logoColor=white 'React')](https://react.dev)
+- [![Vite](https://img.shields.io/badge/Vite%208.0.10-646CFF?logo=vite&logoColor=white 'Vite')](https://vite.dev)
 - [![TailwindCSS](https://img.shields.io/badge/TailwindCSS%204.2.4-06B6D4?logo=tailwindcss&logoColor=white 'TailwindCSS')](https://tailwindcss.com)
 
 ## Project setup
