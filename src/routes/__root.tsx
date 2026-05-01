@@ -12,6 +12,9 @@ function RootComponent() {
         <Link to="/" activeProps={{ className: 'font-bold' }}>
           Home
         </Link>
+        <Link to="/about" activeProps={{ className: 'font-bold' }}>
+          About
+        </Link>
       </nav>
       <Outlet />
       <TanStackRouterDevtools />
