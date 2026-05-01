@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/ianriizky/bca-mycoreplus/blob/main/README.md",
   "scripts": {
-    "build": "tsc -b && vite build",
+    "build": "tsr generate && tsc -b && vite build",
     "start:dev": "vite",
     "start:prod": "vite preview",
     "lint": "eslint .",
@@ -36,6 +36,7 @@
     "test:int:show-report": "vite preview --outDir ./tests/output/int/html"
   },
   "dependencies": {
+    "@tanstack/react-router": "^1.169.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },
@@ -43,6 +44,9 @@
     "@babel/core": "^7.29.0",
     "@eslint/js": "^10.0.1",
     "@rolldown/plugin-babel": "^0.2.3",
+    "@tanstack/react-router-devtools": "^1.166.13",
+    "@tanstack/router-cli": "^1.166.40",
+    "@tanstack/router-plugin": "^1.167.31",
     "@types/babel__core": "^7.20.5",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
