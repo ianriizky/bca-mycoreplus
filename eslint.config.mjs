@@ -9,7 +9,7 @@ export default defineConfig(
   eslint.configs.recommended,
   tseslint.configs.recommended,
   eslintPluginPrettierRecommended,
-  globalIgnores(['tests/output/']),
+  globalIgnores(['dist/', 'tests/output/']),
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     plugins: {
