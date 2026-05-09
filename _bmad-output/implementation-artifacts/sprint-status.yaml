@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-05-10T00:00:00.000Z
-last_updated: 2026-05-10T04:02:00.000Z
+last_updated: 2026-05-10T04:07:00.000Z
 project: bca-mycoreplus
 project_key: NOKEY
 tracking_system: file-system
@@ -49,10 +49,10 @@ development_status:
   1-3-file-upload-with-size-validation: done
   1-4-safe-zone-overlay: done
   1-5-colorthief-palette-extraction-and-picker: done
-  1-6-clipboard-whatsapp-and-fallback-download: backlog
-  1-7-undo-redo-stack-in-zustand: backlog
-  1-8-lazy-load-heavy-libraries: backlog
-  1-9-accessibility-aria-attributes-and-keyboard: backlog
-  1-10-tests-for-main-interaction-flows: backlog
-  1-11-document-epic: backlog
+  1-6-clipboard-whatsapp-and-fallback-download: done
+  1-7-undo-redo-stack-in-zustand: ready-for-dev
+  1-8-lazy-load-heavy-libraries: ready-for-dev
+  1-9-accessibility-aria-attributes-and-keyboard: ready-for-dev
+  1-10-tests-for-main-interaction-flows: ready-for-dev
+  1-11-document-epic: ready-for-dev
   epic-1-retrospective: optional
