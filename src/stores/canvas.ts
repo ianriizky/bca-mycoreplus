@@ -38,6 +38,7 @@ interface CanvasStore {
   updateObject: (id: string, props: Record<string, unknown>) => void
   deleteObject: (id: string) => void
   selectObject: (id: string | null) => void
+  applyColor: (id: string, color: string) => void
   undo: () => void
   redo: () => void
 }
@@ -246,6 +247,24 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
       fabricCanvas.discardActiveObject()
       fabricCanvas.requestRenderAll()
     }
+  },
+
+  /**
+   * Apply color to object
+   */
+  applyColor: (id: string, color: string) => {
+    const { fabricCanvas } = get()
+    if (!fabricCanvas) return
+
+    const obj = fabricCanvas.getObjects().find((o: any) => (o as any).id === id)
+    if (!obj) {
+      console.warn(`Object with id ${id} not found`)
+
+      return
+    }
+
+    obj.set({ fill: color })
+    fabricCanvas.requestRenderAll()
   },
 
   /**

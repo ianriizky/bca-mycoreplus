@@ -1,0 +1,58 @@
+# generated: 2026-05-10T00:00:00.000Z
+# last_updated: 2026-05-10T03:54:00.000Z
+# project: bca-mycoreplus
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-05-10T00:00:00.000Z
+last_updated: 2026-05-10T04:02:00.000Z
+project: bca-mycoreplus
+project_key: NOKEY
+tracking_system: file-system
+story_location: implementation-artifacts
+
+development_status:
+  # Epic 1: Initial MVP Architecture
+  epic-1: in-progress
+  1-1-canvas-editor-component: done
+  1-2-floating-toolbar-component: done
+  1-3-file-upload-with-size-validation: done
+  1-4-safe-zone-overlay: done
+  1-5-colorthief-palette-extraction-and-picker: done
+  1-6-clipboard-whatsapp-and-fallback-download: backlog
+  1-7-undo-redo-stack-in-zustand: backlog
+  1-8-lazy-load-heavy-libraries: backlog
+  1-9-accessibility-aria-attributes-and-keyboard: backlog
+  1-10-tests-for-main-interaction-flows: backlog
+  1-11-document-epic: backlog
+  epic-1-retrospective: optional

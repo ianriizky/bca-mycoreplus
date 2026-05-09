@@ -13,6 +13,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   test: {
+    setupFiles: ['tests/setup.ts'],
     projects: [
       {
         extends: true,
