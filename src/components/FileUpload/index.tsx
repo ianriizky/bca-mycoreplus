@@ -105,24 +105,38 @@ export function FileUpload({
     <div className={className}>
       <input
         ref={fileInputRef}
+        id="file-upload-input"
         type="file"
         accept="image/*"
         onChange={handleFileChange}
-        aria-label="Upload Image"
+        aria-label="Select image file to upload"
+        aria-describedby="file-upload-help"
         className="hidden"
       />
 
       <button
         onClick={() => fileInputRef.current?.click()}
         className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+        aria-label="Upload image (PNG, JPG, SVG, WebP - max 5MB)"
       >
         Upload Image
       </button>
 
+      <div id="file-upload-help" className="sr-only">
+        Supported formats: PNG, JPG, SVG, WebP. Maximum file size: 5MB.
+      </div>
+
       {showPreviewModal && preview && selectedFile && (
-        <div className="bg-opacity-50 fixed inset-0 flex items-center justify-center bg-black">
+        <div
+          className="bg-opacity-50 fixed inset-0 flex items-center justify-center bg-black"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="preview-modal-title"
+        >
           <div className="w-96 rounded-lg bg-white p-6">
-            <h2 className="mb-4 text-lg font-semibold">Preview Gambar</h2>
+            <h2 id="preview-modal-title" className="mb-4 text-lg font-semibold">
+              Preview Gambar
+            </h2>
 
             <img
               src={preview}
@@ -161,13 +175,22 @@ export function FileUpload({
       {showErrorModal && errorMessage && (
         <div
           className="bg-opacity-50 fixed inset-0 flex items-center justify-center bg-black"
-          role="alert"
-          aria-live="polite"
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="error-modal-title"
+          aria-describedby="error-modal-message"
         >
           <div className="w-96 rounded-lg bg-white p-6">
-            <h2 className="mb-4 text-lg font-semibold text-red-600">Error</h2>
+            <h2
+              id="error-modal-title"
+              className="mb-4 text-lg font-semibold text-red-600"
+            >
+              Error
+            </h2>
 
-            <p className="mb-6 text-gray-700">{errorMessage}</p>
+            <p id="error-modal-message" className="mb-6 text-gray-700">
+              {errorMessage}
+            </p>
 
             <div className="flex gap-2">
               {errorMessage.includes('Upload gagal') ? (

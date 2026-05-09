@@ -3,6 +3,13 @@ import type { Canvas } from 'fabric'
 
 import { create } from 'zustand'
 
+import {
+  deserializeCanvasState,
+  serializeCanvasState,
+} from '@/lib/canvas/serialize'
+import { loadFabric } from '@/lib/fabric-loader'
+import { useHistoryStore } from '@/stores/history'
+
 /**
  * Serialized object for persistence and state management
  */
@@ -23,6 +30,8 @@ interface CanvasStore {
   objects: SerializedObject[]
   selectedObjectId: string | null
   isLoading: boolean
+  clipboardSupported: boolean
+  isExporting: boolean
   history: {
     past: SerializedObject[][]
     future: SerializedObject[][]
@@ -39,6 +48,7 @@ interface CanvasStore {
   deleteObject: (id: string) => void
   selectObject: (id: string | null) => void
   applyColor: (id: string, color: string) => void
+  initClipboardSupport: () => Promise<void>
   undo: () => void
   redo: () => void
 }
@@ -48,6 +58,8 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
   objects: [],
   selectedObjectId: null,
   isLoading: false,
+  clipboardSupported: false,
+  isExporting: false,
   history: {
     past: [],
     future: [],
@@ -63,7 +75,7 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
       fabricCanvas.dispose()
     }
 
-    const { Canvas } = await import('fabric/es')
+    const { Canvas } = await loadFabric()
     const canvas = new Canvas(el, {
       width: 375,
       height: 500,
@@ -72,7 +84,7 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
       preserveObjectStacking: true,
     })
 
-    set({ fabricCanvas })
+    set({ fabricCanvas: canvas })
 
     // Handle selection changes
     canvas.on('selection:created', (e: any) => {
@@ -158,6 +170,10 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
           set((state) => ({
             objects: [...state.objects, serialized],
           }))
+
+          // Push to history
+          const historyStore = useHistoryStore.getState()
+          historyStore.pushHistory(serializeCanvasState(fabricCanvas))
         })
         .catch((err: any) => {
           console.error('Failed to load image:', err)
@@ -175,6 +191,10 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     set((state) => ({
       objects: [...state.objects, serialized],
     }))
+
+    // Push to history
+    const historyStore = useHistoryStore.getState()
+    historyStore.pushHistory(serializeCanvasState(fabricCanvas))
 
     return id
   },
@@ -201,6 +221,10 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
       (o as any).id === id ? fabricCanvas.toJSON() : o,
     )
     set({ objects: newObjects })
+
+    // Push to history
+    const historyStore = useHistoryStore.getState()
+    historyStore.pushHistory(serializeCanvasState(fabricCanvas))
   },
 
   /**
@@ -224,6 +248,10 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     // Remove from serialized objects
     const newObjects = objects.filter((o: any) => (o as any).id !== id)
     set({ objects: newObjects, selectedObjectId: null })
+
+    // Push to history
+    const historyStore = useHistoryStore.getState()
+    historyStore.pushHistory(serializeCanvasState(fabricCanvas))
   },
 
   /**
@@ -268,18 +296,44 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
   },
 
   /**
+   * Initialize clipboard support detection
+   */
+  initClipboardSupport: async () => {
+    const supported =
+      typeof navigator !== 'undefined' &&
+      typeof navigator.clipboard !== 'undefined' &&
+      typeof navigator.clipboard.write === 'function'
+
+    set({ clipboardSupported: supported })
+  },
+
+  /**
    * Undo last action
    */
   undo: () => {
-    // TODO: Implement undo functionality
-    console.log('Undo not implemented yet')
+    const { fabricCanvas } = get()
+    if (!fabricCanvas) return
+
+    const historyStore = useHistoryStore.getState()
+    const previousState = historyStore.undo()
+
+    if (previousState) {
+      deserializeCanvasState(fabricCanvas, previousState)
+    }
   },
 
   /**
    * Redo last undone action
    */
   redo: () => {
-    // TODO: Implement redo functionality
-    console.log('Redo not implemented yet')
+    const { fabricCanvas } = get()
+    if (!fabricCanvas) return
+
+    const historyStore = useHistoryStore.getState()
+    const nextState = historyStore.redo()
+
+    if (nextState) {
+      deserializeCanvasState(fabricCanvas, nextState)
+    }
   },
 }))

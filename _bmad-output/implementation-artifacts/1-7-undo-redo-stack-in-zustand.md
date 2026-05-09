@@ -665,6 +665,43 @@ const extractPalette = async (imageUrl: string) => {
 
 ---
 
-**Story Status**: ready-for-dev  
+**Story Status**: completed  
 **Created**: 2026-05-10T03:56:00.000Z  
-**Last Updated**: 2026-05-10T03:56:00.000Z
+**Last Updated**: 2026-05-10T04:20:00.000Z
+
+## Implementation Summary
+
+### Completed Components
+
+1. **History Store** (`src/stores/history.ts`)
+   - Zustand store with undo/redo stack management
+   - Max stack size of 10 items enforced
+   - Redo stack cleared on new action
+   - All unit tests passing (14/14)
+
+2. **Canvas Serialization** (`src/lib/canvas/serialize.ts`)
+   - `serializeCanvasState()` - captures canvas state with JSON
+   - `deserializeCanvasState()` - restores canvas from saved state
+
+3. **Canvas Store Integration** (`src/stores/canvas.ts`)
+   - Extended with `undo()` and `redo()` methods
+   - History tracking added to:
+     - `addObject()` - text and image objects
+     - `updateObject()` - property changes
+     - `deleteObject()` - object removal
+
+4. **UndoRedoButtons Component** (`src/components/UndoRedoButtons/index.tsx`)
+   - Visual undo/redo buttons with BCA brand colors
+   - Disabled state when stacks are empty
+   - Integrated into ExportToolbar
+
+5. **Keyboard Shortcuts** (`src/components/CanvasEditor/hooks/useUndoRedoShortcuts.ts`)
+   - Ctrl+Z / Cmd+Z for undo
+   - Ctrl+Y / Cmd+Y / Ctrl+Shift+Z / Cmd+Shift+Z for redo
+   - Platform-aware modifier detection
+
+### Test Results
+
+- History store unit tests: 14/14 passing
+- Build: Successful (pre-existing Fabric.js type warnings only)
+- All acceptance criteria satisfied

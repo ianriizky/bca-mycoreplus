@@ -20,4 +20,28 @@ export default defineConfig({
     react(),
     babel({ presets: [reactCompilerPreset()] }),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (id.includes('node_modules/fabric')) {
+            return 'fabric'
+          }
+
+          if (id.includes('node_modules/colorthief')) {
+            return 'colorthief'
+          }
+
+          if (
+            id.includes('node_modules/react') ||
+            id.includes('node_modules/zustand') ||
+            id.includes('node_modules/@tanstack')
+          ) {
+            return 'vendor'
+          }
+        },
+      },
+    },
+    chunkSizeWarningLimit: 500,
+  },
 })

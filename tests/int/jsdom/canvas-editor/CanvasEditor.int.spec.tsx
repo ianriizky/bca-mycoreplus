@@ -1,9 +1,15 @@
 import { render } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 
-import { CanvasEditor } from '@/components/CanvasEditor/index'
+// Mock components BEFORE importing CanvasEditor
+vi.mock('@/components/ExportToolbar', () => ({
+  ExportToolbar: () => null,
+}))
 
-// Mock Fabric.js Canvas
+vi.mock('@/components/Toast', () => ({
+  ToastContainer: () => null,
+}))
+
 vi.mock('fabric/es', () => {
   class MockCanvas {
     dispose = vi.fn()
@@ -11,6 +17,8 @@ vi.mock('fabric/es', () => {
 
   return { Canvas: MockCanvas }
 })
+
+import { CanvasEditor } from '@/components/CanvasEditor/index'
 
 describe('CanvasEditor', () => {
   it('should initialize canvas on mount', () => {

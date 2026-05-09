@@ -1,13 +1,17 @@
-import { Canvas } from 'fabric/es'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
+import { ExportToolbar } from '@/components/ExportToolbar'
 import { FileUpload } from '@/components/FileUpload'
 import { FloatingToolbar } from '@/components/FloatingToolbar'
 import { SafeZoneOverlay } from '@/components/SafeZoneOverlay'
+import { ToastContainer } from '@/components/Toast'
+import { loadFabric } from '@/lib/fabric-loader'
 import { useCanvasStore } from '@/stores/canvas'
 
 import { useCanvasEvents } from './hooks/useCanvasEvents'
+import { useCopyShortcut } from './hooks/useCopyShortcut'
 import { useKeyboardNav } from './hooks/useKeyboardNav'
+import { useUndoRedoShortcuts } from './hooks/useUndoRedoShortcuts'
 
 interface CanvasEditorProps {
   className?: string
@@ -15,28 +19,49 @@ interface CanvasEditorProps {
 
 export function CanvasEditor({ className }: CanvasEditorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { initCanvas, disposeCanvas, addObject } = useCanvasStore()
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const { initCanvas, disposeCanvas, addObject, initClipboardSupport } =
+    useCanvasStore()
 
   useCanvasEvents()
+  useCopyShortcut()
   useKeyboardNav()
+  useUndoRedoShortcuts()
 
   useEffect(() => {
     if (!canvasRef.current) return
 
-    const canvas = new Canvas(canvasRef.current, {
-      width: 375,
-      height: 500,
-      backgroundColor: '#FFFFFF',
-      selection: true,
-      preserveObjectStacking: true,
-    })
+    let isMounted = true
 
-    initCanvas(canvas)
+    const initializeFabric = async () => {
+      try {
+        setIsLoading(true)
+        setError(null)
+        await loadFabric()
+
+        if (!isMounted) return
+
+        await initCanvas(canvasRef.current!)
+        initClipboardSupport()
+        setIsLoading(false)
+      } catch (err) {
+        if (isMounted) {
+          setError(
+            err instanceof Error ? err.message : 'Failed to load Fabric.js',
+          )
+          setIsLoading(false)
+        }
+      }
+    }
+
+    initializeFabric()
 
     return () => {
+      isMounted = false
       disposeCanvas()
     }
-  }, [initCanvas, disposeCanvas])
+  }, [initCanvas, disposeCanvas, initClipboardSupport])
 
   const handleFileSelected = useCallback(
     (_file: File, preview: string) => {
@@ -49,6 +74,17 @@ export function CanvasEditor({ className }: CanvasEditorProps) {
     console.error('File upload error:', error)
   }, [])
 
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center p-4">
+        <div className="text-red-600">
+          <h2 className="text-lg font-bold">Failed to load canvas editor</h2>
+          <p className="text-sm">{error}</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={className}>
       <div className="mb-4 flex gap-2">
@@ -59,6 +95,11 @@ export function CanvasEditor({ className }: CanvasEditorProps) {
       </div>
 
       <div className="relative">
+        {isLoading && (
+          <div className="bg-opacity-50 absolute inset-0 flex items-center justify-center bg-white">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
+          </div>
+        )}
         <canvas
           ref={canvasRef}
           role="application"
@@ -69,7 +110,9 @@ export function CanvasEditor({ className }: CanvasEditorProps) {
         <SafeZoneOverlay />
       </div>
 
+      <ExportToolbar />
       <FloatingToolbar />
+      <ToastContainer />
     </div>
   )
 }
