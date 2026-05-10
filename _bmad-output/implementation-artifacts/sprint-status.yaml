@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-05-10T00:00:00.000Z
-last_updated: 2026-05-10T05:30:00.000Z
+last_updated: 2026-05-10T09:00:00.000Z
 project: bca-mycoreplus
 project_key: NOKEY
 tracking_system: file-system
@@ -55,4 +55,13 @@ development_status:
   1-9-accessibility-aria-attributes-and-keyboard: done
   1-10-tests-for-main-interaction-flows: done
   1-11-document-epic: done
-  epic-1-retrospective: optional
+  epic-1-retrospective: done
+
+  # Epic 2: MVP Improvements & UX Refinement - IN PROGRESS
+  epic-2: in-progress
+  2-1-add-text-button-and-ui: ready-for-dev
+  2-2-whatsapp-message-customization: ready-for-dev
+  2-3-image-positioning-controls: ready-for-dev
+  2-4-enhanced-text-editing-features: ready-for-dev
+  2-5-story-spec-process-improvement: ready-for-dev
+  epic-2-retrospective: optional

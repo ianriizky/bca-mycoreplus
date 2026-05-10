@@ -139,3 +139,83 @@ Goal: Build a zero‑server client‑side image editor with brand compliance, cl
 - Document the epic in this file.
 
 ---
+
+### Epic 2 – MVP Improvements & UX Refinement
+
+Goal: Fix missing features dan improve UX dari Epic 1 MVP berdasarkan retrospective findings.
+
+#### Stories
+
+##### Story 2-1: Add Text Button & UI (Priority: High)
+
+As a BCA staff member,
+I want to add text to canvas with a dedicated button,
+so that I can create custom messages without needing to upload images first.
+
+**Acceptance Criteria:**
+
+1. AC1: "Add Text" button visible in CanvasEditor toolbar
+2. AC2: Button has `aria-label="Add Text to Canvas"`
+3. AC3: Clicking button adds text object at canvas center
+4. AC4: Text uses BCA default styling (fontSize: 48, fill: #0B1F3A)
+5. AC5: Keyboard shortcut (T key) to add text
+
+##### Story 2-2: WhatsApp Message Customization (Priority: High)
+
+As a BCA staff member,
+I want to customize the WhatsApp message before sharing,
+so that I can personalize messages for different customers.
+
+**Acceptance Criteria:**
+
+1. AC1: Input field for message text before WhatsApp share
+2. AC2: Default message: "Lihat gambar ini dari BCA MyCore+"
+3. AC3: Message persists in localStorage for next session
+4. AC4: Character limit indicator (max 500 chars)
+
+##### Story 2-3: Image Positioning Controls (Priority: Medium)
+
+As a BCA staff member,
+I want precision controls for positioning images,
+so that I can place objects exactly where needed.
+
+**Acceptance Criteria:**
+
+1. AC1: Nudge buttons (↑↓←→) for fine positioning
+2. AC2: Position indicator shows X/Y coordinates
+3. AC3: Snap-to-center option available
+4. AC4: Controls work for both text and image objects
+
+##### Story 2-4: Enhanced Text Editing Features (Priority: Medium)
+
+As a BCA staff member,
+I want to edit text with Canva-like features (alignment, line height, box resizing),
+so that I can create professional-looking text content easily.
+
+**Acceptance Criteria:**
+
+1. AC1: Text alignment controls (Left, Center, Right, Justify)
+2. AC2: Line height control (slider 1.0-2.5)
+3. AC3: Text box resizing with text wrapping
+4. AC4: Font family selection dropdown (6 preset fonts)
+5. AC5: Character spacing control
+
+##### Story 2-5: Story Spec Process Improvement (Priority: Low)
+
+As a development team,
+I want clearer story specifications with concrete UI elements,
+so that we can ensure all AC are fully implemented before "done".
+
+**Acceptance Criteria:**
+
+1. AC1: Every AC must identify specific UI element (button ID, aria-label)
+2. AC2: Story specs include wireframe/mockup reference
+3. AC3: QA demo checklist before story marked "done"
+
+#### Gap Sources (from Epic 1 Retrospective)
+
+- **WhatsApp message hardcoded** - Story 1-6 AC2 stated "customizable" but no UI implemented
+- **Add Text button missing** - Story 1-1 AC2 mentioned "via floating toolbar" but no button exists
+- **Image positioning UX** - Fabric.js handles work but no precision controls
+
+---
