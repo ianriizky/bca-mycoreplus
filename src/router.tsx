@@ -1,4 +1,4 @@
-import { createRouter } from '@tanstack/react-router'
+import { createRouter, Link } from '@tanstack/react-router'
 
 import { routeTree } from './routeTree.gen'
 
@@ -7,6 +7,12 @@ export const router = createRouter({
   defaultPreload: 'intent',
   defaultStaleTime: 5000,
   scrollRestoration: true,
+  defaultNotFoundComponent: () => (
+    <div>
+      <p>Not found!</p>
+      <Link to="/">Go home</Link>
+    </div>
+  ),
 })
 
 declare module '@tanstack/react-router' {
