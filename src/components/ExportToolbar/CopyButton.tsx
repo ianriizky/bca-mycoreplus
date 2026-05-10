@@ -31,6 +31,7 @@ export function CopyButton() {
     >
       <Clipboard size={18} />
       <span className="hidden sm:inline">Copy Image to Clipboard</span>
+      <span className="text-xs sm:hidden">Copy</span>
     </button>
   )
 }

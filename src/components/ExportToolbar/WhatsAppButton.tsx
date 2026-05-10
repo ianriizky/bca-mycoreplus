@@ -123,7 +123,8 @@ export function WhatsAppButton() {
             aria-label="Edit WhatsApp message and phone number"
           >
             <Edit2Icon size={18} aria-hidden="true" />
-            <span className="hidden sm:inline">Edit</span>
+            <span className="hidden sm:inline">Edit Message</span>
+            <span className="text-xs sm:hidden">Edit</span>
           </button>
           <button
             onClick={handleWhatsApp}
@@ -132,7 +133,8 @@ export function WhatsAppButton() {
             aria-label="Share to WhatsApp"
           >
             <MessageCircle size={18} />
-            <span className="hidden sm:inline">WhatsApp</span>
+            <span className="hidden sm:inline">Send to WhatsApp</span>
+            <span className="text-xs sm:hidden">WhatsApp</span>
           </button>
           {whatsappPhoneNumber && (
             <span className="text-sm text-gray-600">

@@ -31,6 +31,7 @@ export function DownloadButton() {
     >
       <Download size={18} />
       <span className="hidden sm:inline">Save Image as File</span>
+      <span className="text-xs sm:hidden">Save</span>
     </button>
   )
 }
