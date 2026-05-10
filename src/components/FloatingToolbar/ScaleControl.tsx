@@ -1,5 +1,5 @@
 import { Minus, Plus } from 'lucide-react'
-import { useState } from 'react'
+import { useRef } from 'react'
 
 interface ScaleControlProps {
   value: number
@@ -20,32 +20,34 @@ export function ScaleControl({
   label,
   unit = '',
 }: ScaleControlProps) {
-  const [inputValue, setInputValue] = useState(value.toString())
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const handleDecrement = () => {
     const newValue = Math.max(min, value - step)
     onChange(newValue)
-    setInputValue(newValue.toString())
+    if (inputRef.current) {
+      inputRef.current.value = newValue.toString()
+    }
   }
 
   const handleIncrement = () => {
     const newValue = Math.min(max, value + step)
     onChange(newValue)
-    setInputValue(newValue.toString())
-  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value)
+    if (inputRef.current) {
+      inputRef.current.value = newValue.toString()
+    }
   }
 
   const handleInputBlur = () => {
-    const parsed = parseFloat(inputValue)
-    if (!isNaN(parsed)) {
+    if (!inputRef.current) return
+
+    const parsed = parseFloat(inputRef.current.value)
+    if (!isNaN(parsed) && parsed > 0) {
       const clamped = Math.max(min, Math.min(max, parsed))
       onChange(clamped)
-      setInputValue(clamped.toString())
+      inputRef.current.value = clamped.toString()
     } else {
-      setInputValue(value.toString())
+      inputRef.current.value = value.toString()
     }
   }
 
@@ -68,10 +70,10 @@ export function ScaleControl({
       </button>
 
       <input
+        ref={inputRef}
         type="text"
         inputMode="decimal"
-        value={inputValue}
-        onChange={handleInputChange}
+        defaultValue={value.toString()}
         onBlur={handleInputBlur}
         onKeyDown={handleKeyDown}
         className="w-16 rounded border border-[#0B1F3A]/30 bg-white px-2 py-1 text-center text-sm text-[#0B1F3A]"

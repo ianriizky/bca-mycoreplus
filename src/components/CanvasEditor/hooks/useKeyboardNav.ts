@@ -4,6 +4,17 @@ import type { FabricObjectWithId } from '@/types/fabric'
 
 import { useCanvasStore } from '@/stores/canvas'
 
+function isEditableElement(element: EventTarget | null): boolean {
+  if (!element || !(element instanceof HTMLElement)) return false
+
+  const tagName = element.tagName.toLowerCase()
+  const isEditableTag = ['input', 'textarea', 'select'].includes(tagName)
+
+  const isEditableAttribute = element.isContentEditable
+
+  return isEditableTag || isEditableAttribute
+}
+
 export function useKeyboardNav() {
   const { fabricCanvas, selectedObjectId, deleteObject, selectObject } =
     useCanvasStore()
@@ -15,6 +26,8 @@ export function useKeyboardNav() {
       if (!selectedObjectId) return
 
       if (e.key === 'Delete' || e.key === 'Backspace') {
+        if (isEditableElement(e.target)) return
+
         e.preventDefault()
         deleteObject(selectedObjectId)
         selectObject(null)
@@ -23,6 +36,8 @@ export function useKeyboardNav() {
       }
 
       if (e.key.startsWith('Arrow')) {
+        if (isEditableElement(e.target)) return
+
         e.preventDefault()
         const obj = fabricCanvas
           .getObjects()

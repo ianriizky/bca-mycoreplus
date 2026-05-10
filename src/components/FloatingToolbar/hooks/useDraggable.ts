@@ -26,7 +26,7 @@ export function useDraggable(initialPosition: { x: number; y: number }) {
         position: initialPosition,
       }))
     }
-  }, [initialPosition.x, initialPosition.y])
+  }, [initialPosition, initialPosition.x, initialPosition.y])
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (e.button !== 0) return

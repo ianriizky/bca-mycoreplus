@@ -1,6 +1,6 @@
 # Story 2-4: Enhanced Text Editing Features (Canva-like)
 
-**Status:** ready-for-dev
+**Status:** review
 **Epic:** Epic 2 - MVP Improvements & UX Refinement
 **Story ID:** 2-4
 **Story Key:** 2-4-enhanced-text-editing-features
@@ -490,6 +490,95 @@ Using web-safe fonts (no loading required):
 | `src/components/FloatingToolbar/index.tsx`                | UPDATE | +15 lines                     |
 | `src/stores/canvas.ts`                                    | UPDATE | +5 lines (default text props) |
 | `tests/unit/components/FloatingToolbar/*.test.tsx`        | NEW    | ~100 lines total              |
+
+---
+
+## Tasks/Subtasks
+
+- [x] Create TextAlignmentButtons component with Left/Center/Right/Justify controls
+- [x] Create FontFamilySelector component with 6 preset fonts
+- [x] Create TextSpacingControls component with line height and char spacing sliders
+- [x] Update FloatingToolbar to integrate new text controls
+- [x] Update canvas.ts to add default text properties (textAlign, lineHeight, charSpacing, width)
+- [x] Create unit tests for TextAlignmentButtons
+- [x] Create unit tests for FontFamilySelector
+- [x] Create unit tests for TextSpacingControls
+- [x] Run all tests and verify they pass
+- [x] Run build and verify no TypeScript errors
+
+---
+
+## Dev Agent Record
+
+### Implementation Plan
+
+Implemented Canva-like text editing features by creating three new components:
+
+1. **TextAlignmentButtons** - 4 alignment buttons (left, center, right, justify)
+2. **FontFamilySelector** - Dropdown with 6 web-safe fonts
+3. **TextSpacingControls** - Line height (1.0-2.5) and character spacing (0-200) sliders
+
+All components follow existing patterns from NudgeButtons and PositionDisplay. Used Fabric.js built-in properties - no custom text rendering needed.
+
+### Debug Log
+
+- Initial implementation completed without issues
+- Fixed TypeScript errors in test files by adding `as unknown[]` type assertion to mock getObjects
+- All 283 tests pass
+- Build successful with no errors
+
+### Completion Notes
+
+✅ All acceptance criteria met:
+
+- AC1: Text alignment controls (Left, Center, Right, Justify) ✅
+- AC2: Line height control (1.0 - 2.5) ✅
+- AC3: Text box resizing (Fabric.js native support) ✅
+- AC4: Font family selection (6 presets) ✅
+- AC5: Character spacing control (0 - 200) ✅
+
+Implementation follows red-green-refactor:
+
+- Tests written first and verified to fail
+- Implementation added to make tests pass
+- Code refactored for clarity and consistency
+
+---
+
+## File List
+
+### New Files
+
+- `src/components/FloatingToolbar/TextAlignmentButtons.tsx`
+- `src/components/FloatingToolbar/FontFamilySelector.tsx`
+- `src/components/FloatingToolbar/TextSpacingControls.tsx`
+- `tests/int/unit/components/FloatingToolbar/TextAlignmentButtons.test.tsx`
+- `tests/int/unit/components/FloatingToolbar/FontFamilySelector.test.tsx`
+- `tests/int/unit/components/FloatingToolbar/TextSpacingControls.test.tsx`
+
+### Modified Files
+
+- `src/components/FloatingToolbar/index.tsx` - Integrated new text controls
+- `src/stores/canvas.ts` - Added default text properties
+- `tests/int/unit/components/FloatingToolbar/NudgeButtons.test.tsx` - Fixed TypeScript mock
+- `tests/int/unit/components/FloatingToolbar/PositionDisplay.test.tsx` - Fixed TypeScript mock
+
+---
+
+## Change Log
+
+**2026-05-10** - Story implementation completed
+
+- Created TextAlignmentButtons component with 4 alignment options
+- Created FontFamilySelector component with 6 web-safe fonts
+- Created TextSpacingControls component with line height and char spacing sliders
+- Integrated all new components into FloatingToolbar
+- Added default text properties to canvas store (textAlign: 'left', lineHeight: 1.2, charSpacing: 0, width: 300)
+- Created comprehensive unit tests for all new components (36 test cases)
+- Fixed TypeScript errors in test mocks
+- All 283 tests passing
+- Build successful with no errors
+- Story marked as ready for review
 
 ---
 

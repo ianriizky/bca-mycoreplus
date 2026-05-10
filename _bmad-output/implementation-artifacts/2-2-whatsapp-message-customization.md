@@ -6,7 +6,7 @@
 **Story Key:** 2-2-whatsapp-message-customization
 **Priority:** HIGH
 **Date Created:** 2026-05-10
-**Last Updated:** 2026-05-10T12:56:42.035Z
+**Last Updated:** 2026-05-10T20:35:00.000Z
 
 ---
 
@@ -372,6 +372,7 @@ export function WhatsAppButton() {
 - [x] Run all tests and verify no regressions
 - [x] Build project and verify TypeScript compilation
 - [x] UI Layout Reorganization: Move Upload, Undo, Redo, Add Text to top row; Copy, Download to second row; WhatsApp separate on third row
+- [x] Add phone number feature: Add `whatsappPhoneNumber` to preferences store, update `openWhatsApp()` function, add phone input in WhatsAppButton
 
 ---
 
@@ -401,6 +402,12 @@ export function WhatsAppButton() {
 - ✅ UI Layout Reorganization: Moved action buttons (Upload, Undo, Redo, Add Text) to top row; Export buttons (Copy, Download) to second row; WhatsApp with Edit Message on third row
 - ✅ Updated ExportToolbar and CanvasEditor components for new layout
 - ✅ All tests still passing after layout changes
+- ✅ Added `whatsappPhoneNumber` field to preferences store
+- ✅ Updated `openWhatsApp()` function to accept optional phone number (strips non-digits)
+- ✅ Added phone number input field in WhatsAppButton edit form
+- ✅ Added 5 new tests for phone number feature (3 component tests, 2 utility tests)
+- ✅ All 287 tests passing
+- ✅ Build successful
 
 ### Completion Notes
 
@@ -429,17 +436,27 @@ export function WhatsAppButton() {
 
 **Test Results:**
 
-- All 231 tests passing (no regressions after UI reorganization)
+- All 287 tests passing (no regressions after phone number feature)
 - Build successful (TypeScript clean)
+
+**Features Added:**
+
+1. Message customization with localStorage persistence
+2. Phone number field (optional) - sends directly to specific contact
+3. Character counter (500 max) for message
+4. Collapsible edit UI for message + phone number
+5. Shows saved phone number next to WhatsApp button when set
 
 **Files Modified:**
 
-- `src/stores/preferences.ts` (+7 lines: whatsappMessage field + persist wrapper)
-- `src/components/ExportToolbar/WhatsAppButton.tsx` (+80 lines: input UI + edit logic)
+- `src/stores/preferences.ts` (+10 lines: whatsappMessage + whatsappPhoneNumber fields + persist wrapper)
+- `src/components/ExportToolbar/WhatsAppButton.tsx` (+120 lines: input UI + phone number + edit logic)
 - `src/components/ExportToolbar/index.tsx` (UPDATED: removed UndoRedo/AddText, reorganized layout)
 - `src/components/CanvasEditor/index.tsx` (UPDATED: added UndoRedo/AddText to top row)
+- `src/lib/clipboard.ts` (UPDATED: openWhatsApp now accepts phone number parameter)
 - `tests/int/unit/stores/preferences.test.ts` (NEW: 77 lines)
-- `tests/int/unit/components/ExportToolbar/WhatsAppButton.test.tsx` (NEW: 260 lines)
+- `tests/int/unit/components/ExportToolbar/WhatsAppButton.test.tsx` (NEW: 246 lines)
+- `tests/int/unit/lib/clipboard.test.ts` (UPDATED: +2 tests for phone number feature)
 
 ---
 
@@ -456,6 +473,14 @@ export function WhatsAppButton() {
 
 ## Change Log
 
+- **2026-05-10T20:35:00.000Z**: Added phone number field feature
+  - Added `whatsappPhoneNumber` field to preferences store with persist
+  - Updated `openWhatsApp()` function to accept optional phone number parameter
+  - Added phone number input field in WhatsAppButton edit form
+  - Phone number strips non-digit characters and formats as wa.me/{phone}?text=...
+  - Shows saved phone number next to WhatsApp button when set
+  - Added 4 new tests (3 for WhatsAppButton, 2 for clipboard utility)
+  - All 287 tests passing
 - **2026-05-10T12:56:42.035Z**: UI layout reorganization
   - Moved Upload Image, Undo, Redo, Add Text to top row (action buttons)
   - Separated Copy, Download to second row (export buttons)

@@ -10,13 +10,17 @@ Object.defineProperty(window, 'open', {
 })
 
 const mockSetWhatsappMessage = vi.fn()
+const mockSetWhatsappPhoneNumber = vi.fn()
 const mockWhatsappMessage = 'Lihat gambar ini dari BCA MyCore+'
+const mockWhatsappPhoneNumber = ''
 
 vi.mock('@/stores/preferences', () => ({
   usePreferencesStore: vi.fn((selector) => {
     const state = {
       whatsappMessage: mockWhatsappMessage,
+      whatsappPhoneNumber: mockWhatsappPhoneNumber,
       setWhatsappMessage: mockSetWhatsappMessage,
+      setWhatsappPhoneNumber: mockSetWhatsappPhoneNumber,
     }
 
     return selector(state)
@@ -126,10 +130,13 @@ describe('WhatsAppButton Component', () => {
       const textarea = screen.getByLabelText(/whatsapp message text/i)
       fireEvent.change(textarea, { target: { value: 'Custom message' } })
 
-      const saveButton = screen.getByRole('button', { name: /save message/i })
+      const saveButton = screen.getByRole('button', {
+        name: /save message and phone number/i,
+      })
       fireEvent.click(saveButton)
 
       expect(mockSetWhatsappMessage).toHaveBeenCalledWith('Custom message')
+      expect(mockSetWhatsappPhoneNumber).toHaveBeenCalledWith('')
     })
 
     it('hides input field after saving', async () => {
@@ -158,13 +165,31 @@ describe('WhatsAppButton Component', () => {
       fireEvent.change(textarea, { target: { value: 'Changed message' } })
 
       const cancelButton = screen.getByRole('button', {
-        name: /cancel editing message/i,
+        name: /cancel editing/i,
       })
       fireEvent.click(cancelButton)
 
       expect(
         screen.queryByLabelText(/whatsapp message text/i),
       ).not.toBeInTheDocument()
+    })
+
+    it('calls setWhatsappPhoneNumber when saving', async () => {
+      render(<WhatsAppButton />)
+      const editButton = screen.getByRole('button', {
+        name: /edit whatsapp message/i,
+      })
+      fireEvent.click(editButton)
+
+      const phoneInput = screen.getByLabelText(/whatsapp phone number/i)
+      fireEvent.change(phoneInput, { target: { value: '628123456789' } })
+
+      const saveButton = screen.getByRole('button', {
+        name: /save message and phone number/i,
+      })
+      fireEvent.click(saveButton)
+
+      expect(mockSetWhatsappPhoneNumber).toHaveBeenCalledWith('628123456789')
     })
   })
 
@@ -196,7 +221,19 @@ describe('WhatsAppButton Component', () => {
       render(<WhatsAppButton />)
       expect(
         screen.getByRole('button', { name: /edit whatsapp message/i }),
-      ).toHaveAttribute('aria-label', 'Edit WhatsApp message')
+      ).toHaveAttribute('aria-label', 'Edit WhatsApp message and phone number')
+    })
+
+    it('has phone number input with aria-label', async () => {
+      render(<WhatsAppButton />)
+      const editButton = screen.getByRole('button', {
+        name: /edit whatsapp message/i,
+      })
+      fireEvent.click(editButton)
+
+      expect(
+        screen.getByLabelText(/whatsapp phone number/i),
+      ).toBeInTheDocument()
     })
 
     it('has textarea with aria-label', async () => {

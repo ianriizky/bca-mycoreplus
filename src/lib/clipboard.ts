@@ -73,8 +73,12 @@ export function downloadCanvasAsPNG(canvas: HTMLCanvasElement): void {
 
 export function openWhatsApp(
   message: string = 'Lihat gambar ini dari BCA MyCore+',
+  phoneNumber?: string,
 ): void {
   const encodedMessage = encodeURIComponent(message)
-  const waLink = `https://wa.me/?text=${encodedMessage}`
+  const phone = phoneNumber ? phoneNumber.replace(/\D/g, '') : ''
+  const waLink = phone
+    ? `https://wa.me/${phone}?text=${encodedMessage}`
+    : `https://wa.me/?text=${encodedMessage}`
   window.open(waLink, '_blank')
 }

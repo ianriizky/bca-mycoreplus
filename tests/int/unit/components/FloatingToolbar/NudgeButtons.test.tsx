@@ -5,7 +5,7 @@ import { NudgeButtons } from '@/components/FloatingToolbar/NudgeButtons'
 
 const mockUpdateObject = vi.fn()
 const mockFabricCanvas = {
-  getObjects: vi.fn(() => []),
+  getObjects: vi.fn(() => [] as unknown[]),
 }
 
 vi.mock('@/stores/canvas', () => ({

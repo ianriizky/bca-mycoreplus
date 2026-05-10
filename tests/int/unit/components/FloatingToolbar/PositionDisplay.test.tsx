@@ -6,7 +6,7 @@ import { PositionDisplay } from '@/components/FloatingToolbar/PositionDisplay'
 const mockOn = vi.fn()
 const mockOff = vi.fn()
 const mockFabricCanvas = {
-  getObjects: vi.fn(() => []),
+  getObjects: vi.fn(() => [] as unknown[]),
   on: mockOn,
   off: mockOff,
 }

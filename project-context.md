@@ -20,6 +20,8 @@ BCA MyCore+ adalah aplikasi web untuk generate image profesional yang berjalan 1
 - ✅ Undo/Redo Support (10 actions)
 - ✅ Accessibility (WCAG 2.1 Level A)
 - ✅ Mobile-First Responsive Design
+- ✅ Text Formatting (alignment, line height, char spacing, fonts)
+- ✅ Object Positioning Controls (nudge, snap-to-center)
 
 ## Technology Stack
 
@@ -132,15 +134,27 @@ bca-mycoreplus/
      - Font size control (8px - 200px)
      - FileUpload modal positioning fix
 
+2. **2-4-enhanced-text-editing-features** ✅ (Review)
+   - Text alignment controls (Left, Center, Right, Justify)
+   - Line height control (1.0 - 2.5)
+   - Character spacing control (0 - 200)
+   - Font family selector with 6 web-safe fonts
+   - Default text properties on creation
+   - Text box width set to 300px for wrapping
+   - **New Components:**
+     - TextAlignmentButtons.tsx
+     - FontFamilySelector.tsx
+     - TextSpacingControls.tsx
+   - **Tests:** 36 new test cases, all passing
+
 ### Stories In Progress
 
-2. **2-1-add-text-button-and-ui** (Review)
-3. **2-2-whatsapp-message-customization** (Review)
+1. **2-1-add-text-button-and-ui** (Review)
+2. **2-2-whatsapp-message-customization** (Review)
 
 ### Stories Ready for Dev
 
-4. **2-4-enhanced-text-editing-features** (Ready)
-5. **2-5-story-spec-process-improvement** (Ready)
+1. **2-5-story-spec-process-improvement** (Ready)
 
 ### Main Documentation Files
 

@@ -138,6 +138,10 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
         fontSize: 48,
         fill: '#0B1F3A',
         fontFamily: 'system-ui',
+        textAlign: 'left',
+        lineHeight: 1.2,
+        charSpacing: 0,
+        width: 300,
       })
       ;(obj as unknown as { id: string }).id = id
 

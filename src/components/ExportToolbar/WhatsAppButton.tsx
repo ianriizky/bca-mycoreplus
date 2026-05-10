@@ -1,4 +1,4 @@
-import { Edit2Icon, MessageCircle } from 'lucide-react'
+import { Edit2Icon, MessageCircle, PhoneIcon } from 'lucide-react'
 import { useCallback, useState } from 'react'
 
 import { openWhatsApp } from '@/lib/clipboard'
@@ -10,77 +10,120 @@ const MAX_MESSAGE_LENGTH = 500
 export function WhatsAppButton() {
   const fabricCanvas = useCanvasStore((s) => s.fabricCanvas)
   const whatsappMessage = usePreferencesStore((s) => s.whatsappMessage)
+  const whatsappPhoneNumber = usePreferencesStore((s) => s.whatsappPhoneNumber)
   const setWhatsappMessage = usePreferencesStore((s) => s.setWhatsappMessage)
+  const setWhatsappPhoneNumber = usePreferencesStore(
+    (s) => s.setWhatsappPhoneNumber,
+  )
 
   const [isEditing, setIsEditing] = useState(false)
   const [localMessage, setLocalMessage] = useState(whatsappMessage)
+  const [localPhoneNumber, setLocalPhoneNumber] = useState(whatsappPhoneNumber)
 
   const handleWhatsApp = useCallback(() => {
-    openWhatsApp(whatsappMessage)
-  }, [whatsappMessage])
+    openWhatsApp(whatsappMessage, whatsappPhoneNumber)
+  }, [whatsappMessage, whatsappPhoneNumber])
 
   const handleSaveMessage = useCallback(() => {
     setWhatsappMessage(localMessage)
+    setWhatsappPhoneNumber(localPhoneNumber)
     setIsEditing(false)
-  }, [localMessage, setWhatsappMessage])
+  }, [
+    localMessage,
+    localPhoneNumber,
+    setWhatsappMessage,
+    setWhatsappPhoneNumber,
+  ])
 
   const handleCancelEdit = useCallback(() => {
     setLocalMessage(whatsappMessage)
+    setLocalPhoneNumber(whatsappPhoneNumber)
     setIsEditing(false)
-  }, [whatsappMessage])
+  }, [whatsappMessage, whatsappPhoneNumber])
 
   return (
     <div className="flex flex-col gap-2">
       {isEditing ? (
-        <div className="flex flex-col gap-2 rounded-lg border border-gray-300 bg-white p-3">
-          <label
-            htmlFor="whatsapp-message"
-            className="text-sm font-medium text-gray-700"
-          >
-            WhatsApp Message
-          </label>
-          <textarea
-            id="whatsapp-message"
-            value={localMessage}
-            onChange={(e) =>
-              setLocalMessage(e.target.value.slice(0, MAX_MESSAGE_LENGTH))
-            }
-            className="min-h-20 rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-            placeholder="Write WhatsApp message..."
-            maxLength={MAX_MESSAGE_LENGTH}
-            aria-label="WhatsApp message text"
-          />
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-gray-500">
-              {localMessage.length}/{MAX_MESSAGE_LENGTH}
-            </span>
-            <div className="flex gap-2">
-              <button
-                onClick={handleCancelEdit}
-                className="rounded bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-300"
-                aria-label="Cancel editing message"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSaveMessage}
-                className="rounded bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700"
-                aria-label="Save message"
-              >
-                Save
-              </button>
+        <div className="flex flex-col gap-3 rounded-lg border border-gray-300 bg-white p-3">
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="whatsapp-phone"
+              className="text-sm font-medium text-gray-700"
+            >
+              Phone Number (Optional)
+            </label>
+            <div className="flex items-center gap-2">
+              <PhoneIcon
+                size={16}
+                className="text-gray-400"
+                aria-hidden="true"
+              />
+              <input
+                id="whatsapp-phone"
+                type="tel"
+                value={localPhoneNumber}
+                onChange={(e) => setLocalPhoneNumber(e.target.value)}
+                className="flex-1 rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                placeholder="e.g., 628123456789"
+                aria-label="WhatsApp phone number"
+              />
             </div>
+            <span className="text-xs text-gray-500">
+              Format: country code + number (e.g., 62 for Indonesia)
+            </span>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="whatsapp-message"
+              className="text-sm font-medium text-gray-700"
+            >
+              Message
+            </label>
+            <textarea
+              id="whatsapp-message"
+              value={localMessage}
+              onChange={(e) =>
+                setLocalMessage(e.target.value.slice(0, MAX_MESSAGE_LENGTH))
+              }
+              className="min-h-20 rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              placeholder="Write WhatsApp message..."
+              maxLength={MAX_MESSAGE_LENGTH}
+              aria-label="WhatsApp message text"
+            />
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-500">
+                {localMessage.length}/{MAX_MESSAGE_LENGTH}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={handleCancelEdit}
+              className="rounded bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-300"
+              aria-label="Cancel editing"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSaveMessage}
+              className="rounded bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700"
+              aria-label="Save message and phone number"
+            >
+              Save
+            </button>
           </div>
         </div>
       ) : (
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => setIsEditing(true)}
-            className="flex items-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
-            aria-label="Edit WhatsApp message"
+            className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+            aria-label="Edit WhatsApp message and phone number"
           >
             <Edit2Icon size={18} aria-hidden="true" />
-            <span className="hidden sm:inline">Edit Message</span>
+            <span className="hidden sm:inline">Edit</span>
           </button>
           <button
             onClick={handleWhatsApp}
@@ -89,8 +132,13 @@ export function WhatsAppButton() {
             aria-label="Share to WhatsApp"
           >
             <MessageCircle size={18} />
-            <span className="hidden sm:inline">Send Message to WhatsApp</span>
+            <span className="hidden sm:inline">WhatsApp</span>
           </button>
+          {whatsappPhoneNumber && (
+            <span className="text-sm text-gray-600">
+              → {whatsappPhoneNumber}
+            </span>
+          )}
         </div>
       )}
     </div>

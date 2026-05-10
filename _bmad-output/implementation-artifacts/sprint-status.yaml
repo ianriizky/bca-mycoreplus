@@ -1,5 +1,5 @@
 # generated: 2026-05-10T00:00:00.000Z
-# last_updated: 2026-05-10T03:54:00.000Z
+# last_updated: 2026-05-10T13:20:00.000Z
 # project: bca-mycoreplus
 # project_key: NOKEY
 # tracking_system: file-system
@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-05-10T00:00:00.000Z
-last_updated: 2026-05-10T13:01:10.000Z
+last_updated: 2026-05-10T13:35:19.280Z
 project: bca-mycoreplus
 project_key: NOKEY
 tracking_system: file-system
@@ -62,6 +62,6 @@ development_status:
   2-1-add-text-button-and-ui: review
   2-2-whatsapp-message-customization: review
   2-3-image-positioning-controls: review
-  2-4-enhanced-text-editing-features: ready-for-dev
+  2-4-enhanced-text-editing-features: review
   2-5-story-spec-process-improvement: ready-for-dev
   epic-2-retrospective: optional

@@ -5,6 +5,8 @@ import {
   GripVertical,
   Italic,
   Palette,
+  RotateCcw,
+  RotateCw,
   Trash2,
   Upload,
 } from 'lucide-react'
@@ -15,23 +17,17 @@ import type { ColorPaletteItem } from '@/components/ColorPicker/types'
 import { ColorPicker } from '@/components/ColorPicker'
 import { useCanvasStore } from '@/stores/canvas'
 
+import { FontFamilySelector } from './FontFamilySelector'
 import { useDraggable } from './hooks/useDraggable'
 import { useToolbarPosition } from './hooks/useToolbarPosition'
 import { useToolbarVisibility } from './hooks/useToolbarVisibility'
 import { NudgeButtons } from './NudgeButtons'
 import { PositionDisplay } from './PositionDisplay'
 import { ScaleControl } from './ScaleControl'
+import { TextAlignmentButtons } from './TextAlignmentButtons'
+import { TextSpacingControls } from './TextSpacingControls'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
-
-const FONT_FAMILIES = [
-  { value: 'system-ui', label: 'System' },
-  { value: 'Arial', label: 'Arial' },
-  { value: 'Times New Roman', label: 'Times' },
-  { value: 'Georgia', label: 'Georgia' },
-  { value: 'Courier New', label: 'Courier' },
-  { value: 'Verdana', label: 'Verdana' },
-]
 
 function isTextObject(obj: unknown): obj is FabricObject & { type: string } {
   return (
@@ -142,11 +138,6 @@ export function FloatingToolbar() {
     reader.readAsDataURL(file)
   }
 
-  const handleFontFamilyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (!isText || !selectedObjectId) return
-    updateObject(selectedObjectId, { fontFamily: e.target.value })
-  }
-
   const handleFontSizeValueChange = (value: number) => {
     if (!isText || !selectedObjectId) return
     updateObject(selectedObjectId, { fontSize: value })
@@ -179,6 +170,28 @@ export function FloatingToolbar() {
     updateObject(selectedObjectId, { scaleX: value, scaleY: value })
   }
 
+  const handleRotateLeft = () => {
+    if (!selectedObjectId || !selectedObject) return
+
+    const currentAngle =
+      ((selectedObject as unknown as Record<string, unknown>).angle as
+        | number
+        | undefined) || 0
+    const newAngle = currentAngle - 15
+    updateObject(selectedObjectId, { angle: newAngle })
+  }
+
+  const handleRotateRight = () => {
+    if (!selectedObjectId || !selectedObject) return
+
+    const currentAngle =
+      ((selectedObject as unknown as Record<string, unknown>).angle as
+        | number
+        | undefined) || 0
+    const newAngle = currentAngle + 15
+    updateObject(selectedObjectId, { angle: newAngle })
+  }
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
@@ -189,11 +202,6 @@ export function FloatingToolbar() {
   const currentColor =
     ((selectedObject as unknown as Record<string, unknown>).fill as string) ||
     '#0B1F3A'
-
-  const currentFontFamily =
-    ((selectedObject as unknown as Record<string, unknown>).fontFamily as
-      | string
-      | undefined) || 'system-ui'
 
   const currentScale =
     ((selectedObject as unknown as Record<string, unknown>).scaleX as
@@ -294,6 +302,28 @@ export function FloatingToolbar() {
               label="Scale"
               unit="x"
             />
+
+            <div className="h-8 w-px bg-white/20" />
+
+            <button
+              onClick={handleRotateLeft}
+              disabled={!selectedObjectId}
+              className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label="Rotate Left"
+              title="Rotate -15°"
+            >
+              <RotateCcw size={20} />
+            </button>
+
+            <button
+              onClick={handleRotateRight}
+              disabled={!selectedObjectId}
+              className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label="Rotate Right"
+              title="Rotate +15°"
+            >
+              <RotateCw size={20} />
+            </button>
           </>
         )}
 
@@ -311,24 +341,7 @@ export function FloatingToolbar() {
               unit="px"
             />
 
-            <select
-              value={currentFontFamily}
-              onChange={handleFontFamilyChange}
-              disabled={!isText}
-              className="h-10 rounded-lg border border-[#0B1F3A]/30 bg-white px-2 text-sm text-[#0B1F3A] disabled:cursor-not-allowed disabled:opacity-50"
-              aria-label="Font Family"
-              title="Font Family"
-            >
-              {FONT_FAMILIES.map((font) => (
-                <option
-                  key={font.value}
-                  value={font.value}
-                  style={{ fontFamily: font.value }}
-                >
-                  {font.label}
-                </option>
-              ))}
-            </select>
+            <FontFamilySelector selectedObjectId={selectedObjectId} />
 
             <button
               onClick={handleBoldToggle}
@@ -350,7 +363,6 @@ export function FloatingToolbar() {
               <Italic size={20} />
             </button>
 
-            {/* Custom color input */}
             <label className="relative flex size-12 cursor-pointer items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20">
               <input
                 type="color"
@@ -368,6 +380,14 @@ export function FloatingToolbar() {
           </>
         )}
       </div>
+
+      {isText && (
+        <div className="flex items-center gap-2">
+          <TextAlignmentButtons selectedObjectId={selectedObjectId} />
+          <div className="h-8 w-px bg-white/20" />
+          <TextSpacingControls selectedObjectId={selectedObjectId} />
+        </div>
+      )}
     </div>
   )
 }

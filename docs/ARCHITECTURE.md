@@ -41,9 +41,16 @@ App
 │   │   │   ├── Canvas element
 │   │   │   └── Fabric.js instance
 │   │   ├── FloatingToolbar
-│   │   │   ├── Text formatting buttons
-│   │   │   ├── Color picker
-│   │   │   └── Delete button
+│   │   │   ├── PositionDisplay (X/Y coordinates)
+│   │   │   ├── NudgeButtons (↑↓←→, snap-to-center)
+│   │   │   ├── ScaleControl (font size, image scale)
+│   │   │   ├── ColorPicker (palette + custom)
+│   │   │   ├── FontFamilySelector (6 fonts)
+│   │   │   ├── TextAlignmentButtons (left, center, right, justify)
+│   │   │   ├── TextSpacingControls (line height, char spacing)
+│   │   │   ├── Bold/Italic buttons
+│   │   │   ├── Delete button
+│   │   │   └── Upload photo button
 │   │   ├── ColorPalette
 │   │   │   ├── Color extraction
 │   │   │   └── Color selection
@@ -99,10 +106,17 @@ App
 **Responsibilities**:
 
 - Show/hide based on selection
-- Provide text formatting options (bold, italic, underline)
+- Draggable toolbar positioning
+- Provide text formatting options (bold, italic)
+- Handle font family selection (6 fonts)
+- Handle font size adjustment (8-200px)
+- Handle text alignment (left, center, right, justify)
+- Handle line height control (1.0-2.5)
+- Handle character spacing (0-200)
 - Handle color changes
+- Manage object positioning (nudge, snap-to-center)
+- Manage image scaling
 - Manage object deletion
-- Position toolbar relative to selected object
 
 **Dependencies**:
 
@@ -113,9 +127,11 @@ App
 **Key Features**:
 
 - Auto-positioning to avoid viewport overflow
+- Draggable toolbar with mouse drag support
 - Keyboard accessible
 - Touch-friendly button sizes
 - Real-time preview
+- Context-sensitive controls (text-only vs image-only)
 
 #### ColorPalette
 

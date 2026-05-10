@@ -105,11 +105,18 @@ export function EditorPage() {
 ### Features
 
 - Auto-positioning to avoid viewport overflow
-- Text formatting buttons (bold, italic, underline)
-- Color picker integration
+- Draggable toolbar with mouse drag support
+- Text formatting buttons (bold, italic)
 - Font size adjustment
-- Text alignment options
+- Font family selection (6 web-safe fonts)
+- Text alignment options (left, center, right, justify)
+- Line height control (1.0 - 2.5)
+- Character spacing control (0 - 200)
+- Color picker integration
+- Position controls with nudge buttons
+- Scale control for images and text
 - Delete button for object removal
+- Upload photo button
 - Keyboard shortcuts for all actions
 
 ### Accessibility
@@ -132,6 +139,86 @@ export function EditorPage() {
 - Zustand for state management
 - Lucide React for icons
 - Tailwind CSS for styling
+
+### Sub-Components
+
+#### PositionDisplay
+
+**Location**: `src/components/FloatingToolbar/PositionDisplay.tsx`
+
+Displays real-time X/Y coordinates of selected object.
+
+**Features**:
+
+- Shows current position in pixels
+- Updates on object move
+- Accessible coordinate display
+
+#### NudgeButtons
+
+**Location**: `src/components/FloatingToolbar/NudgeButtons.tsx`
+
+Provides fine-grained positioning controls.
+
+**Features**:
+
+- Arrow buttons (↑↓←→) move object 1px per click
+- Snap-to-center button (◎)
+- Keyboard accessible
+- Disabled when no object selected
+
+#### TextAlignmentButtons
+
+**Location**: `src/components/FloatingToolbar/TextAlignmentButtons.tsx`
+
+Text alignment controls for text objects.
+
+**Features**:
+
+- 4 alignment options: Left, Center, Right, Justify
+- Visual active state indicator (aria-pressed)
+- Only visible for text objects
+- Updates Fabric.js textAlign property
+
+#### FontFamilySelector
+
+**Location**: `src/components/FloatingToolbar/FontFamilySelector.tsx`
+
+Font family dropdown selector.
+
+**Features**:
+
+- 6 web-safe font presets (System, Arial, Georgia, Courier, Times, Verdana)
+- Live preview in dropdown
+- Only visible for text objects
+- Updates Fabric.js fontFamily property
+
+#### TextSpacingControls
+
+**Location**: `src/components/FloatingToolbar/TextSpacingControls.tsx`
+
+Line height and character spacing controls.
+
+**Features**:
+
+- Line height slider (1.0 - 2.5)
+- Character spacing slider (0 - 200)
+- Real-time value display
+- Only visible for text objects
+- Updates Fabric.js lineHeight and charSpacing properties
+
+#### ScaleControl
+
+**Location**: `src/components/FloatingToolbar/ScaleControl.tsx`
+
+Generic scale control component for sizing.
+
+**Features**:
+
+- Reusable for font size and image scale
+- Plus/minus buttons for incremental changes
+- Configurable min/max/step values
+- Displays current value with unit
 
 ---
 

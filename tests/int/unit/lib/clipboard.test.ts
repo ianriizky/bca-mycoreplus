@@ -164,6 +164,36 @@ describe('Clipboard Utilities', () => {
 
       openSpy.mockRestore()
     })
+
+    it('should open WhatsApp with phone number', () => {
+      const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null)
+      const phoneNumber = '628123456789'
+      const message = 'Hello from BCA'
+
+      openWhatsApp(message, phoneNumber)
+
+      expect(openSpy).toHaveBeenCalledWith(
+        'https://wa.me/628123456789?text=Hello%20from%20BCA',
+        '_blank',
+      )
+
+      openSpy.mockRestore()
+    })
+
+    it('should strip non-digit characters from phone number', () => {
+      const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null)
+      const phoneNumber = '+62-812-3456-7890'
+      const message = 'Test message'
+
+      openWhatsApp(message, phoneNumber)
+
+      expect(openSpy).toHaveBeenCalledWith(
+        'https://wa.me/6281234567890?text=Test%20message',
+        '_blank',
+      )
+
+      openSpy.mockRestore()
+    })
   })
 
   afterEach(() => {

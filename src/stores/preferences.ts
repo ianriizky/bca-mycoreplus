@@ -9,6 +9,7 @@ interface PreferencesStore {
   defaultFill: string
   showSafeZone: boolean
   whatsappMessage: string
+  whatsappPhoneNumber: string
 
   setTheme: (theme: 'light' | 'dark') => void
   setFontSize: (size: number) => void
@@ -17,6 +18,7 @@ interface PreferencesStore {
   setDefaultFill: (fill: string) => void
   setShowSafeZone: (show: boolean) => void
   setWhatsappMessage: (message: string) => void
+  setWhatsappPhoneNumber: (phone: string) => void
 }
 
 export const usePreferencesStore = create<PreferencesStore>()(
@@ -29,6 +31,7 @@ export const usePreferencesStore = create<PreferencesStore>()(
       defaultFill: '#FFFFFF',
       showSafeZone: true,
       whatsappMessage: 'Lihat gambar ini dari BCA MyCore+',
+      whatsappPhoneNumber: '',
 
       setTheme: (theme) => set({ theme }),
       setFontSize: (fontSize) => set({ fontSize }),
@@ -37,6 +40,8 @@ export const usePreferencesStore = create<PreferencesStore>()(
       setDefaultFill: (defaultFill) => set({ defaultFill }),
       setShowSafeZone: (showSafeZone) => set({ showSafeZone }),
       setWhatsappMessage: (whatsappMessage) => set({ whatsappMessage }),
+      setWhatsappPhoneNumber: (whatsappPhoneNumber) =>
+        set({ whatsappPhoneNumber }),
     }),
     {
       name: 'bca-mycoreplus-preferences',
