@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 
 import {
   checkClipboardSupport,
@@ -74,17 +74,23 @@ describe('Clipboard Utilities', () => {
       mockCanvas = document.createElement('canvas')
       mockBlob = new Blob(['test'], { type: 'image/png' })
 
-      vi.spyOn(mockCanvas, 'toBlob').mockImplementation((callback) => {
-        callback(mockBlob)
-
-        return undefined
-      })
+      // Use vi.fn() with mockImplementation instead of spyOn
+      // JSDOM canvas toBlob is not spyable
+      mockCanvas.toBlob = vi.fn(
+        (callback: ((blob: Blob | null) => void) | null) => {
+          if (callback) callback(mockBlob)
+        },
+      )
 
       vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url')
       vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
       vi.spyOn(document, 'createElement').mockReturnValue(
         document.createElement('a'),
       )
+    })
+
+    afterEach(() => {
+      mockCanvas.toBlob = vi.fn()
     })
 
     it('should call canvas.toBlob', () => {
@@ -138,7 +144,7 @@ describe('Clipboard Utilities', () => {
       openWhatsApp(customMessage)
 
       expect(openSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Check%20this%20out%21'),
+        'https://wa.me/?text=Check%20this%20out!',
         '_blank',
       )
 
@@ -152,11 +158,15 @@ describe('Clipboard Utilities', () => {
       openWhatsApp(messageWithSpecialChars)
 
       expect(openSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Hello%20%26%20goodbye%21'),
+        'https://wa.me/?text=Hello%20%26%20goodbye!',
         '_blank',
       )
 
       openSpy.mockRestore()
     })
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 })

@@ -70,7 +70,9 @@ describe('Clipboard API', () => {
 
   describe('openWhatsApp', () => {
     it('should open WhatsApp with default message', () => {
-      const windowOpenSpy = vi.spyOn(window, 'open').mockImplementation(() => null)
+      const windowOpenSpy = vi
+        .spyOn(window, 'open')
+        .mockImplementation(() => null)
 
       openWhatsApp()
 
@@ -83,7 +85,9 @@ describe('Clipboard API', () => {
     })
 
     it('should open WhatsApp with custom message', () => {
-      const windowOpenSpy = vi.spyOn(window, 'open').mockImplementation(() => null)
+      const windowOpenSpy = vi
+        .spyOn(window, 'open')
+        .mockImplementation(() => null)
       const customMessage = 'Custom message'
 
       openWhatsApp(customMessage)
@@ -97,7 +101,9 @@ describe('Clipboard API', () => {
     })
 
     it('should encode message properly', () => {
-      const windowOpenSpy = vi.spyOn(window, 'open').mockImplementation(() => null)
+      const windowOpenSpy = vi
+        .spyOn(window, 'open')
+        .mockImplementation(() => null)
       const message = 'Lihat gambar ini dari BCA MyCore+'
 
       openWhatsApp(message)

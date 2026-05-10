@@ -167,11 +167,16 @@ describe('Keyboard Utilities', () => {
     })
 
     it('should use assertive priority when specified', () => {
+      const announcements = document.querySelectorAll('[role="status"]')
+      announcements.forEach((el) => el.remove())
+
       announceToScreenReader('Test', 'assertive')
 
       const announcement = document.querySelector('[role="status"]')
 
       expect(announcement?.getAttribute('aria-live')).toBe('assertive')
+
+      announcement?.remove()
     })
 
     it('should add sr-only class', () => {
@@ -183,19 +188,25 @@ describe('Keyboard Utilities', () => {
     })
 
     it('should remove announcement after 1 second', () => {
+      const announcements = document.querySelectorAll('[role="status"]')
+      announcements.forEach((el) => el.remove())
+
       vi.useFakeTimers()
 
-      announceToScreenReader('Test')
+      try {
+        announceToScreenReader('Test announcement')
 
-      let announcement = document.querySelector('[role="status"]')
-      expect(announcement).toBeTruthy()
+        let announcement = document.querySelector('[role="status"]')
+        expect(announcement).toBeTruthy()
+        expect(announcement?.textContent).toBe('Test announcement')
 
-      vi.advanceTimersByTime(1000)
+        vi.advanceTimersByTime(1000)
 
-      announcement = document.querySelector('[role="status"]')
-      expect(announcement).toBeFalsy()
-
-      vi.useRealTimers()
+        announcement = document.querySelector('[role="status"]')
+        expect(announcement).toBeFalsy()
+      } finally {
+        vi.useRealTimers()
+      }
     })
   })
 })

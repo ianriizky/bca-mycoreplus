@@ -21,8 +21,8 @@ describe('History Store', () => {
 
       store.pushHistory(state)
 
-      expect(store.undoStack).toHaveLength(1)
-      expect(store.undoStack[0]).toEqual(state)
+      expect(useHistoryStore.getState().undoStack).toHaveLength(1)
+      expect(useHistoryStore.getState().undoStack[0]).toEqual(state)
     })
 
     it('should clear redo stack when pushing new state', () => {
@@ -32,10 +32,10 @@ describe('History Store', () => {
 
       store.pushHistory(state1)
       store.undo()
-      expect(store.redoStack).toHaveLength(1)
+      expect(useHistoryStore.getState().redoStack).toHaveLength(1)
 
       store.pushHistory(state2)
-      expect(store.redoStack).toHaveLength(0)
+      expect(useHistoryStore.getState().redoStack).toHaveLength(0)
     })
 
     it('should enforce max stack size of 10', () => {
@@ -45,7 +45,7 @@ describe('History Store', () => {
         store.pushHistory(createMockState(i))
       }
 
-      expect(store.undoStack).toHaveLength(10)
+      expect(useHistoryStore.getState().undoStack).toHaveLength(10)
     })
   })
 
@@ -60,8 +60,8 @@ describe('History Store', () => {
 
       store.undo()
 
-      expect(store.undoStack).toHaveLength(1)
-      expect(store.redoStack).toHaveLength(1)
+      expect(useHistoryStore.getState().undoStack).toHaveLength(1)
+      expect(useHistoryStore.getState().redoStack).toHaveLength(1)
     })
 
     it('should return previous state', () => {
@@ -97,8 +97,8 @@ describe('History Store', () => {
 
       store.redo()
 
-      expect(store.undoStack).toHaveLength(2)
-      expect(store.redoStack).toHaveLength(0)
+      expect(useHistoryStore.getState().undoStack).toHaveLength(2)
+      expect(useHistoryStore.getState().redoStack).toHaveLength(0)
     })
 
     it('should return next state', () => {

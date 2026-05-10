@@ -18,11 +18,13 @@ export default defineConfig(({ mode }) => ({
       {
         extends: true,
         test: {
-          name: 'jsdom',
+          name: 'int',
           environment: 'jsdom',
           include: [
             'tests/int/jsdom/**/*.int.spec.ts',
             'tests/int/jsdom/**/*.int.spec.tsx',
+            'tests/int/unit/**/*.test.ts',
+            'tests/int/unit/**/*.test.tsx',
           ],
         },
       },

@@ -80,7 +80,9 @@ describe('Contrast Checker', () => {
     it('should calculate contrast ratio for gold on white', () => {
       const ratio = getContrastRatio('#C8A96A', '#FFFFFF')
 
-      expect(ratio).toBeGreaterThan(4.5)
+      // #C8A96A on white has ratio ~2.2 (low contrast, fails WCAG)
+      expect(ratio).toBeGreaterThan(2.0)
+      expect(ratio).toBeLessThan(3.0)
     })
 
     it('should return same ratio regardless of color order', () => {

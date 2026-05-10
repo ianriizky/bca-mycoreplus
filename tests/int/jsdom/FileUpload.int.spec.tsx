@@ -14,7 +14,7 @@ describe('FileUpload Component', () => {
 
     it('has file input with accept="image/*"', () => {
       render(<FileUpload />)
-      const fileInput = screen.getByLabelText('Upload Image')
+      const fileInput = screen.getByLabelText('Select image file to upload')
       expect(fileInput).toHaveAttribute('accept', 'image/*')
     })
   })
@@ -22,7 +22,7 @@ describe('FileUpload Component', () => {
   describe('AC2: Supported File Formats', () => {
     it('accepts PNG, JPG, SVG, and WebP formats', () => {
       render(<FileUpload />)
-      const fileInput = screen.getByLabelText('Upload Image')
+      const fileInput = screen.getByLabelText('Select image file to upload')
       expect(fileInput).toHaveAttribute('accept', 'image/*')
     })
   })
@@ -30,8 +30,11 @@ describe('FileUpload Component', () => {
   describe('AC5: Accessibility', () => {
     it('has aria-label on file input', () => {
       render(<FileUpload />)
-      const fileInput = screen.getByLabelText('Upload Image')
-      expect(fileInput).toHaveAttribute('aria-label', 'Upload Image')
+      const fileInput = screen.getByLabelText('Select image file to upload')
+      expect(fileInput).toHaveAttribute(
+        'aria-label',
+        'Select image file to upload',
+      )
     })
 
     it('renders error modal with role="alert"', () => {
@@ -44,7 +47,7 @@ describe('FileUpload Component', () => {
   describe('AC6: Performance', () => {
     it('validates file synchronously', () => {
       render(<FileUpload />)
-      const fileInput = screen.getByLabelText('Upload Image')
+      const fileInput = screen.getByLabelText('Select image file to upload')
       expect(fileInput).toBeInTheDocument()
     })
   })
@@ -52,7 +55,7 @@ describe('FileUpload Component', () => {
   describe('AC7: Zero-Server Compliance', () => {
     it('uses FileReader API (no server calls)', () => {
       render(<FileUpload />)
-      const fileInput = screen.getByLabelText('Upload Image')
+      const fileInput = screen.getByLabelText('Select image file to upload')
       expect(fileInput).toHaveAttribute('type', 'file')
     })
   })

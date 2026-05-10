@@ -23,9 +23,9 @@ describe('Toast Store', () => {
 
       store.showToast('Test message', 'success')
 
-      expect(store.toasts).toHaveLength(1)
-      expect(store.toasts[0].message).toBe('Test message')
-      expect(store.toasts[0].type).toBe('success')
+      expect(useToastStore.getState().toasts).toHaveLength(1)
+      expect(useToastStore.getState().toasts[0].message).toBe('Test message')
+      expect(useToastStore.getState().toasts[0].type).toBe('success')
     })
 
     it('should generate unique IDs for toasts', () => {
@@ -34,7 +34,9 @@ describe('Toast Store', () => {
       store.showToast('Message 1', 'success')
       store.showToast('Message 2', 'error')
 
-      expect(store.toasts[0].id).not.toBe(store.toasts[1].id)
+      expect(useToastStore.getState().toasts[0].id).not.toBe(
+        useToastStore.getState().toasts[1].id,
+      )
     })
 
     it('should support all toast types', () => {
@@ -50,8 +52,9 @@ describe('Toast Store', () => {
         store.showToast(`Message ${type}`, type)
       })
 
-      expect(store.toasts).toHaveLength(4)
-      store.toasts.forEach((toast, index) => {
+      const toasts = useToastStore.getState().toasts
+      expect(toasts).toHaveLength(4)
+      toasts.forEach((toast, index) => {
         expect(toast.type).toBe(types[index])
       })
     })
@@ -61,7 +64,7 @@ describe('Toast Store', () => {
 
       store.showToast('Test', 'success')
 
-      expect(store.toasts[0].duration).toBe(4000)
+      expect(useToastStore.getState().toasts[0].duration).toBe(4000)
     })
 
     it('should accept custom duration', () => {
@@ -69,7 +72,7 @@ describe('Toast Store', () => {
 
       store.showToast('Test', 'success', 2000)
 
-      expect(store.toasts[0].duration).toBe(2000)
+      expect(useToastStore.getState().toasts[0].duration).toBe(2000)
     })
 
     it('should accept action with label and onClick', () => {
@@ -78,7 +81,7 @@ describe('Toast Store', () => {
 
       store.showToast('Test', 'success', 4000, action)
 
-      expect(store.toasts[0].action).toEqual(action)
+      expect(useToastStore.getState().toasts[0].action).toEqual(action)
     })
 
     it('should auto-remove toast after duration', () => {
@@ -86,10 +89,10 @@ describe('Toast Store', () => {
       const store = useToastStore.getState()
 
       store.showToast('Test', 'success', 1000)
-      expect(store.toasts).toHaveLength(1)
+      expect(useToastStore.getState().toasts).toHaveLength(1)
 
       vi.advanceTimersByTime(1000)
-      expect(store.toasts).toHaveLength(0)
+      expect(useToastStore.getState().toasts).toHaveLength(0)
 
       vi.useRealTimers()
     })
@@ -102,11 +105,11 @@ describe('Toast Store', () => {
       store.showToast('Message 1', 'success')
       store.showToast('Message 2', 'error')
 
-      const firstToastId = store.toasts[0].id
+      const firstToastId = useToastStore.getState().toasts[0].id
       store.removeToast(firstToastId)
 
-      expect(store.toasts).toHaveLength(1)
-      expect(store.toasts[0].message).toBe('Message 2')
+      expect(useToastStore.getState().toasts).toHaveLength(1)
+      expect(useToastStore.getState().toasts[0].message).toBe('Message 2')
     })
 
     it('should not throw when removing non-existent toast', () => {
@@ -123,10 +126,10 @@ describe('Toast Store', () => {
       store.showToast('Message 1', 'success')
       store.showToast('Message 2', 'error')
 
-      const toastIds = store.toasts.map((t) => t.id)
+      const toastIds = useToastStore.getState().toasts.map((t) => t.id)
       toastIds.forEach((id) => store.removeToast(id))
 
-      expect(store.toasts).toHaveLength(0)
+      expect(useToastStore.getState().toasts).toHaveLength(0)
     })
   })
 })

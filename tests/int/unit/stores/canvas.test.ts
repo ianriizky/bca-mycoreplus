@@ -33,7 +33,7 @@ describe('Canvas Store', () => {
 
       store.selectObject('obj_123')
 
-      expect(store.selectedObjectId).toBe('obj_123')
+      expect(useCanvasStore.getState().selectedObjectId).toBe('obj_123')
     })
 
     it('should clear selection when passed null', () => {
@@ -42,7 +42,7 @@ describe('Canvas Store', () => {
       store.selectObject('obj_123')
       store.selectObject(null)
 
-      expect(store.selectedObjectId).toBeNull()
+      expect(useCanvasStore.getState().selectedObjectId).toBeNull()
     })
   })
 

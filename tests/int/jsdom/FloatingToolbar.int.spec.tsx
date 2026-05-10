@@ -409,6 +409,8 @@ describe('FloatingToolbar', () => {
             }),
           },
         ]),
+        discardActiveObject: vi.fn(),
+        requestRenderAll: vi.fn(),
       }
 
       useCanvasStore.setState({
@@ -489,7 +491,7 @@ describe('FloatingToolbar', () => {
       expect(lastCall[1].fontSize).toBeGreaterThanOrEqual(8)
     })
 
-    it('should use HTML5 color input instead of prompt', () => {
+    it('should open color picker when color button is clicked', () => {
       const mockCanvas = {
         getObjects: vi.fn(() => [
           {
@@ -503,6 +505,7 @@ describe('FloatingToolbar', () => {
             }),
           },
         ]),
+        discardActiveObject: vi.fn(),
       }
 
       useCanvasStore.setState({
@@ -510,13 +513,15 @@ describe('FloatingToolbar', () => {
         fabricCanvas: mockCanvas as any,
       })
 
-      const { container } = render(<FloatingToolbar />)
-      const colorInput = container.querySelector(
-        'input[type="color"]',
-      ) as HTMLInputElement
+      render(<FloatingToolbar />)
+      const colorButton = screen.getByLabelText(/Change Color/i)
 
-      expect(colorInput).toBeInTheDocument()
-      expect(colorInput?.value).toBe('#c8a96a')
+      act(() => {
+        colorButton.click()
+      })
+
+      const dialog = screen.getByRole('dialog')
+      expect(dialog).toBeInTheDocument()
     })
   })
 })
