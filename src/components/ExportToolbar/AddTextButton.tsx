@@ -17,7 +17,7 @@ export function AddTextButton() {
       aria-label="Add Text to Canvas"
     >
       <Type size={18} aria-hidden="true" />
-      <span>Add Text</span>
+      <span className="hidden sm:inline">Add Text</span>
     </button>
   )
 }

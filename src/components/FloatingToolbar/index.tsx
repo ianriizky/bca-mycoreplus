@@ -2,10 +2,9 @@ import type { Object as FabricObject } from 'fabric'
 
 import {
   Bold,
+  GripVertical,
   Italic,
-  Minus,
   Palette,
-  Plus,
   Trash2,
   Upload,
 } from 'lucide-react'
@@ -16,10 +15,23 @@ import type { ColorPaletteItem } from '@/components/ColorPicker/types'
 import { ColorPicker } from '@/components/ColorPicker'
 import { useCanvasStore } from '@/stores/canvas'
 
+import { useDraggable } from './hooks/useDraggable'
 import { useToolbarPosition } from './hooks/useToolbarPosition'
 import { useToolbarVisibility } from './hooks/useToolbarVisibility'
+import { NudgeButtons } from './NudgeButtons'
+import { PositionDisplay } from './PositionDisplay'
+import { ScaleControl } from './ScaleControl'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+
+const FONT_FAMILIES = [
+  { value: 'system-ui', label: 'System' },
+  { value: 'Arial', label: 'Arial' },
+  { value: 'Times New Roman', label: 'Times' },
+  { value: 'Georgia', label: 'Georgia' },
+  { value: 'Courier New', label: 'Courier' },
+  { value: 'Verdana', label: 'Verdana' },
+]
 
 function isTextObject(obj: unknown): obj is FabricObject & { type: string } {
   return (
@@ -28,6 +40,14 @@ function isTextObject(obj: unknown): obj is FabricObject & { type: string } {
     ['text', 'textbox', 'i-text'].includes(
       (obj as Record<string, unknown>).type as string,
     )
+  )
+}
+
+function isImageObject(obj: unknown): boolean {
+  return (
+    obj !== null &&
+    typeof obj === 'object' &&
+    (obj as Record<string, unknown>).type === 'image'
   )
 }
 
@@ -54,6 +74,7 @@ export function FloatingToolbar() {
 
   const { isVisible } = useToolbarVisibility(selectedObject)
   const position = useToolbarPosition(selectedObject)
+  const { position: dragPosition, handleMouseDown } = useDraggable(position)
 
   useEffect(() => {
     if (!isVisible) return
@@ -76,6 +97,7 @@ export function FloatingToolbar() {
   }
 
   const isText = isTextObject(selectedObject)
+  const isImage = isImageObject(selectedObject)
 
   const handleColorSelect = (color: ColorPaletteItem) => {
     if (selectedObjectId) {
@@ -120,15 +142,14 @@ export function FloatingToolbar() {
     reader.readAsDataURL(file)
   }
 
-  const handleFontSizeChange = (delta: number) => {
+  const handleFontFamilyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (!isText || !selectedObjectId) return
+    updateObject(selectedObjectId, { fontFamily: e.target.value })
+  }
 
-    const currentSize =
-      ((selectedObject as unknown as Record<string, unknown>).fontSize as
-        | number
-        | undefined) || 16
-    const newSize = Math.max(8, currentSize + delta)
-    updateObject(selectedObjectId, { fontSize: newSize })
+  const handleFontSizeValueChange = (value: number) => {
+    if (!isText || !selectedObjectId) return
+    updateObject(selectedObjectId, { fontSize: value })
   }
 
   const handleBoldToggle = () => {
@@ -153,6 +174,11 @@ export function FloatingToolbar() {
     updateObject(selectedObjectId, { fontStyle: newStyle })
   }
 
+  const handleImageScaleValueChange = (value: number) => {
+    if (!selectedObjectId) return
+    updateObject(selectedObjectId, { scaleX: value, scaleY: value })
+  }
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
@@ -163,6 +189,21 @@ export function FloatingToolbar() {
   const currentColor =
     ((selectedObject as unknown as Record<string, unknown>).fill as string) ||
     '#0B1F3A'
+
+  const currentFontFamily =
+    ((selectedObject as unknown as Record<string, unknown>).fontFamily as
+      | string
+      | undefined) || 'system-ui'
+
+  const currentScale =
+    ((selectedObject as unknown as Record<string, unknown>).scaleX as
+      | number
+      | undefined) || 1
+
+  const currentFontSize =
+    ((selectedObject as unknown as Record<string, unknown>).fontSize as
+      | number
+      | undefined) || 16
 
   const handleCustomColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!selectedObjectId) return
@@ -175,116 +216,158 @@ export function FloatingToolbar() {
       role="toolbar"
       aria-label="Formatting options"
       aria-hidden={!isVisible}
-      className="fixed z-50 flex items-center gap-2 rounded-xl border border-white/20 bg-white/80 p-3 shadow-lg backdrop-blur-[15px]"
+      data-draggable
+      className="fixed z-50 flex flex-col gap-2 rounded-xl border border-white/20 bg-white/80 p-3 shadow-lg backdrop-blur-[15px]"
       style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
+        left: `${dragPosition.x}px`,
+        top: `${dragPosition.y}px`,
       }}
     >
-      <button
-        onClick={handleOpenColorPicker}
-        className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20"
-        aria-label="Change Color"
-        title="Change Color"
+      <div
+        onMouseDown={handleMouseDown}
+        className="flex cursor-move items-center justify-center rounded-lg hover:bg-white/20"
+        aria-label="Drag to move toolbar"
+        title="Drag to move"
       >
-        <Palette size={20} />
-      </button>
+        <GripVertical size={20} className="text-[#0B1F3A]" />
+      </div>
 
-      <ColorPicker
-        isOpen={isColorPickerOpen}
-        onClose={() => setIsColorPickerOpen(false)}
-        onColorSelect={handleColorSelect}
-        selectedColor={selectedColor}
-      />
+      <div className="flex items-center gap-2">
+        <PositionDisplay selectedObjectId={selectedObjectId} />
+        <NudgeButtons selectedObjectId={selectedObjectId} />
+      </div>
 
-      <button
-        onClick={handleDelete}
-        className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20"
-        aria-label="Delete Object"
-        title="Delete Object"
-      >
-        <Trash2 size={20} />
-      </button>
+      <div className="flex items-center gap-2">
+        <button
+          onClick={handleOpenColorPicker}
+          className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20"
+          aria-label="Change Color"
+          title="Change Color"
+        >
+          <Palette size={20} />
+        </button>
 
-      <button
-        onClick={() => fileInputRef.current?.click()}
-        className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20"
-        aria-label="Upload Photo"
-        title="Upload Photo"
-      >
-        <Upload size={20} />
-      </button>
+        <ColorPicker
+          isOpen={isColorPickerOpen}
+          onClose={() => setIsColorPickerOpen(false)}
+          onColorSelect={handleColorSelect}
+          selectedColor={selectedColor}
+        />
 
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        onChange={handleFileSelect}
-        className="hidden"
-        aria-hidden="true"
-      />
+        <button
+          onClick={handleDelete}
+          className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20"
+          aria-label="Delete Object"
+          title="Delete Object"
+        >
+          <Trash2 size={20} />
+        </button>
 
-      {isText && (
-        <>
-          <div className="h-8 w-px bg-white/20" />
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20"
+          aria-label="Upload Photo"
+          title="Upload Photo"
+        >
+          <Upload size={20} />
+        </button>
 
-          <button
-            onClick={() => handleFontSizeChange(2)}
-            disabled={!isText}
-            className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
-            aria-label="Increase Font Size"
-            title="Increase Font Size"
-          >
-            <Plus size={20} />
-          </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileSelect}
+          className="hidden"
+          aria-hidden="true"
+        />
 
-          <button
-            onClick={() => handleFontSizeChange(-2)}
-            disabled={!isText}
-            className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
-            aria-label="Decrease Font Size"
-            title="Decrease Font Size"
-          >
-            <Minus size={20} />
-          </button>
+        {isImage && (
+          <>
+            <div className="h-8 w-px bg-white/20" />
 
-          <button
-            onClick={handleBoldToggle}
-            disabled={!isText}
-            className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
-            aria-label="Bold"
-            title="Bold"
-          >
-            <Bold size={20} />
-          </button>
-
-          <button
-            onClick={handleItalicToggle}
-            disabled={!isText}
-            className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
-            aria-label="Italic"
-            title="Italic"
-          >
-            <Italic size={20} />
-          </button>
-
-          {/* Custom color input */}
-          <label className="relative flex size-12 cursor-pointer items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20">
-            <input
-              type="color"
-              value={currentColor}
-              onChange={handleCustomColorChange}
-              className="absolute inset-0 cursor-pointer opacity-0"
-              aria-label="Custom Text Color"
-              title="Custom Text Color"
+            <ScaleControl
+              value={currentScale}
+              min={0.1}
+              max={5}
+              step={0.1}
+              onChange={handleImageScaleValueChange}
+              label="Scale"
+              unit="x"
             />
-            <div
-              className="size-6 rounded-full border-2 border-[#0B1F3A]"
-              style={{ backgroundColor: currentColor }}
+          </>
+        )}
+
+        {isText && (
+          <>
+            <div className="h-8 w-px bg-white/20" />
+
+            <ScaleControl
+              value={currentFontSize}
+              min={8}
+              max={200}
+              step={2}
+              onChange={handleFontSizeValueChange}
+              label="Font Size"
+              unit="px"
             />
-          </label>
-        </>
-      )}
+
+            <select
+              value={currentFontFamily}
+              onChange={handleFontFamilyChange}
+              disabled={!isText}
+              className="h-10 rounded-lg border border-[#0B1F3A]/30 bg-white px-2 text-sm text-[#0B1F3A] disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label="Font Family"
+              title="Font Family"
+            >
+              {FONT_FAMILIES.map((font) => (
+                <option
+                  key={font.value}
+                  value={font.value}
+                  style={{ fontFamily: font.value }}
+                >
+                  {font.label}
+                </option>
+              ))}
+            </select>
+
+            <button
+              onClick={handleBoldToggle}
+              disabled={!isText}
+              className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label="Bold"
+              title="Bold"
+            >
+              <Bold size={20} />
+            </button>
+
+            <button
+              onClick={handleItalicToggle}
+              disabled={!isText}
+              className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label="Italic"
+              title="Italic"
+            >
+              <Italic size={20} />
+            </button>
+
+            {/* Custom color input */}
+            <label className="relative flex size-12 cursor-pointer items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20">
+              <input
+                type="color"
+                value={currentColor}
+                onChange={handleCustomColorChange}
+                className="absolute inset-0 cursor-pointer opacity-0"
+                aria-label="Custom Text Color"
+                title="Custom Text Color"
+              />
+              <div
+                className="size-6 rounded-full border-2 border-[#0B1F3A]"
+                style={{ backgroundColor: currentColor }}
+              />
+            </label>
+          </>
+        )}
+      </div>
     </div>
   )
 }

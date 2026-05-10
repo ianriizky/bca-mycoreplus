@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react'
 
 import { ExportToolbar } from '@/components/ExportToolbar'
+import { AddTextButton } from '@/components/ExportToolbar/AddTextButton'
 import { FileUpload } from '@/components/FileUpload'
 import { FloatingToolbar } from '@/components/FloatingToolbar'
 import { SafeZoneOverlay } from '@/components/SafeZoneOverlay'
 import { ToastContainer } from '@/components/Toast'
+import { UndoRedoButtons } from '@/components/UndoRedoButtons'
 import { loadFabric } from '@/lib/fabric-loader'
 import { useCanvasStore } from '@/stores/canvas'
 
@@ -121,10 +123,13 @@ export function CanvasEditor({ className }: CanvasEditorProps) {
 
   return (
     <div className={className}>
-      <div className="mb-4 flex gap-2">
+      <div className="mb-4 flex flex-wrap gap-2 sm:gap-3">
+        <UndoRedoButtons />
+        <AddTextButton />
         <FileUpload
           onFileSelected={handleFileSelected}
           onError={handleFileError}
+          className="flex shadow-lg backdrop-blur-sm"
         />
       </div>
 

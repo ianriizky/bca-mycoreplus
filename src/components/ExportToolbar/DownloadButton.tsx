@@ -30,7 +30,7 @@ export function DownloadButton() {
       aria-label="Download as PNG"
     >
       <Download size={18} />
-      <span className="hidden sm:inline">Download</span>
+      <span className="hidden sm:inline">Save Image as File</span>
     </button>
   )
 }

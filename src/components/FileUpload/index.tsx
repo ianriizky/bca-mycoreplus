@@ -1,4 +1,5 @@
-import { useCallback, useReducer, useRef } from 'react'
+import { Minus, Plus, Upload } from 'lucide-react'
+import { useCallback, useReducer, useRef, useState } from 'react'
 
 import type { FileUploadProps } from './types'
 
@@ -74,11 +75,14 @@ export function FileUpload({
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [state, dispatch] = useReducer(fileUploadReducer, initialState)
   const { validateFile } = useFileValidation()
+  const [previewScale, setPreviewScale] = useState(100)
 
   const handleFileChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0]
       if (!file) return
+
+      setPreviewScale(100)
 
       const validation = validateFile(file)
       if (!validation.valid) {
@@ -127,6 +131,14 @@ export function FileUpload({
     }
   }, [])
 
+  const handleZoomIn = () => {
+    setPreviewScale((prev) => Math.min(prev + 25, 300))
+  }
+
+  const handleZoomOut = () => {
+    setPreviewScale((prev) => Math.max(prev - 25, 25))
+  }
+
   const handleChooseAnother = useCallback(() => {
     dispatch({ type: 'CLOSE_ERROR' })
     if (fileInputRef.current) {
@@ -149,54 +161,84 @@ export function FileUpload({
   }, [])
 
   return (
-    <div className={className}>
-      <input
-        ref={fileInputRef}
-        id="file-upload-input"
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        aria-label="Select image file to upload"
-        aria-describedby="file-upload-help"
-        className="hidden"
-      />
+    <>
+      <div className={className}>
+        <input
+          ref={fileInputRef}
+          id="file-upload-input"
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          aria-label="Select image file to upload"
+          aria-describedby="file-upload-help"
+          className="hidden"
+        />
 
-      <button
-        onClick={() => fileInputRef.current?.click()}
-        className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-        aria-label="Upload image (PNG, JPG, SVG, WebP - max 5MB)"
-      >
-        Upload Image
-      </button>
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+          aria-label="Upload image (PNG, JPG, SVG, WebP - max 5MB)"
+        >
+          <Upload size={18} aria-hidden="true" />
+          <span className="hidden sm:inline">Upload Image</span>
+        </button>
 
-      <div id="file-upload-help" className="sr-only">
-        Supported formats: PNG, JPG, SVG, WebP. Maximum file size: 5MB.
+        <div id="file-upload-help" className="sr-only">
+          Supported formats: PNG, JPG, SVG, WebP. Maximum file size: 5MB.
+        </div>
       </div>
 
       {state.showPreviewModal && state.preview && state.selectedFile && (
         <div
-          className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-neutral-950"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
           role="dialog"
           aria-modal="true"
           aria-labelledby="preview-modal-title"
         >
-          <div className="w-96 rounded-lg bg-white p-6">
+          <div className="max-w-lg rounded-lg bg-white p-6">
             <h2 id="preview-modal-title" className="mb-4 text-lg font-semibold">
-              Preview Gambar
+              Image Preview
             </h2>
 
-            <img
-              src={state.preview}
-              alt="Preview"
-              className="mb-4 h-48 w-full object-contain"
-            />
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-sm text-zinc-600">
+                Zoom: {previewScale}%
+              </span>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleZoomOut}
+                  disabled={previewScale <= 25}
+                  className="flex size-8 items-center justify-center rounded bg-zinc-200 hover:bg-zinc-300 disabled:opacity-50"
+                  aria-label="Zoom out"
+                >
+                  <Minus size={16} />
+                </button>
+                <button
+                  onClick={handleZoomIn}
+                  disabled={previewScale >= 300}
+                  className="flex size-8 items-center justify-center rounded bg-zinc-200 hover:bg-zinc-300 disabled:opacity-50"
+                  aria-label="Zoom in"
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+            </div>
+
+            <div className="mb-4 overflow-auto rounded border border-zinc-200 p-2">
+              <img
+                src={state.preview}
+                alt="Preview"
+                className="mx-auto h-auto max-h-64 w-auto object-contain"
+                style={{ transform: `scale(${previewScale / 100})` }}
+              />
+            </div>
 
             <div className="mb-4 space-y-2 text-sm">
               <p>
-                <strong>Nama File:</strong> {state.selectedFile.name}
+                <strong>File Name:</strong> {state.selectedFile.name}
               </p>
               <p>
-                <strong>Ukuran:</strong>{' '}
+                <strong>Size:</strong>{' '}
                 {(state.selectedFile.size / 1024 / 1024).toFixed(2)} MB
               </p>
             </div>
@@ -206,13 +248,13 @@ export function FileUpload({
                 onClick={handleConfirmUpload}
                 className="flex-1 rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700"
               >
-                Konfirmasi Upload
+                Upload
               </button>
               <button
                 onClick={handleCancelPreview}
                 className="flex-1 rounded-lg bg-zinc-400 px-4 py-2 text-white hover:bg-zinc-500"
               >
-                Batal
+                Cancel
               </button>
             </div>
           </div>
@@ -221,13 +263,13 @@ export function FileUpload({
 
       {state.showErrorModal && state.errorMessage && (
         <div
-          className="bg-opacity-50 fixed inset-0 flex items-center justify-center bg-neutral-950"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
           role="alertdialog"
           aria-modal="true"
           aria-labelledby="error-modal-title"
           aria-describedby="error-modal-message"
         >
-          <div className="w-96 rounded-lg bg-white p-6">
+          <div className="max-w-lg rounded-lg bg-white p-6">
             <h2
               id="error-modal-title"
               className="mb-4 text-lg font-semibold text-red-600"
@@ -275,6 +317,6 @@ export function FileUpload({
           </div>
         </div>
       )}
-    </div>
+    </>
   )
 }

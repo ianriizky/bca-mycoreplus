@@ -23,6 +23,8 @@ function createMockCanvas(objects: MockObject[]): Canvas {
     getObjects: vi.fn(() => objects),
     discardActiveObject: vi.fn(),
     requestRenderAll: vi.fn(),
+    on: vi.fn(),
+    off: vi.fn(),
   } as unknown as Canvas
 }
 

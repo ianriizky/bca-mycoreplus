@@ -114,7 +114,33 @@ bca-mycoreplus/
     - Troubleshooting guide
     - Contributing guidelines
 
-## Documentation
+## Epic 2: MVP Improvements & UX Refinement - IN PROGRESS
+
+### Stories Completed
+
+1. **2-3-image-positioning-controls** ✅ (Review)
+   - Position controls for fine-tuned object placement
+   - Nudge buttons (↑↓←→) move object 1px per click
+   - Position indicator shows X/Y coordinates in real-time
+   - Snap-to-center button places object at canvas center
+   - Works for both text and image objects
+   - **Enhancements:**
+     - Draggable toolbar with mouse drag support
+     - Font family selector (6 fonts)
+     - Scale control component for precise sizing
+     - Image scale control (0.1x - 5x)
+     - Font size control (8px - 200px)
+     - FileUpload modal positioning fix
+
+### Stories In Progress
+
+2. **2-1-add-text-button-and-ui** (Review)
+3. **2-2-whatsapp-message-customization** (Review)
+
+### Stories Ready for Dev
+
+4. **2-4-enhanced-text-editing-features** (Ready)
+5. **2-5-story-spec-process-improvement** (Ready)
 
 ### Main Documentation Files
 

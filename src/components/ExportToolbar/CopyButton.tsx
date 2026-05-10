@@ -30,7 +30,7 @@ export function CopyButton() {
       aria-label="Copy to clipboard"
     >
       <Clipboard size={18} />
-      <span className="hidden sm:inline">Copy</span>
+      <span className="hidden sm:inline">Copy Image to Clipboard</span>
     </button>
   )
 }
