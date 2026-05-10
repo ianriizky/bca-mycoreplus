@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 
 import { useCanvasStore } from '@/stores/canvas'
 
-// @ts-expect-error - Fabric.js v6 object types incompatibility
 export function useKeyboardNav() {
   const { fabricCanvas, selectedObjectId, deleteObject, selectObject } =
     useCanvasStore()

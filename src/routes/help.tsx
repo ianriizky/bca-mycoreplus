@@ -6,63 +6,63 @@ export const Route = createFileRoute('/help')({
 
 function HelpComponent() {
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
+    <div className="min-h-screen bg-zinc-50 p-4 sm:p-8">
       <div className="mx-auto max-w-2xl">
-        <h1 className="mb-8 text-3xl font-bold text-gray-900">
+        <h1 className="mb-8 text-3xl font-semibold text-zinc-900">
           Keyboard Shortcuts & Help
         </h1>
 
         <div className="space-y-8">
           {/* Keyboard Shortcuts Section */}
           <section className="rounded-lg bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-xl font-semibold text-gray-900">
+            <h2 className="mb-4 text-xl font-semibold text-zinc-900">
               Keyboard Shortcuts
             </h2>
-            <p className="mb-4 text-gray-600">
+            <p className="mb-4 text-zinc-600">
               BCA MyCore+ supports the following keyboard shortcuts for
               efficient editing:
             </p>
 
             <div className="space-y-4">
-              <div className="border-l-4 border-blue-500 bg-blue-50 p-4">
-                <h3 className="font-semibold text-gray-900">Editing</h3>
-                <ul className="mt-2 space-y-2 text-sm text-gray-700">
+              <div className="rounded-lg border border-blue-200 bg-gradient-to-r from-blue-100 to-blue-50 p-4">
+                <h3 className="font-semibold text-zinc-900">Editing</h3>
+                <ul className="mt-2 space-y-2 text-sm text-zinc-700">
                   <li>
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       Ctrl+Z
                     </kbd>
                     {' / '}
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       Cmd+Z
                     </kbd>
                     {' - Undo last action'}
                   </li>
                   <li>
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       Ctrl+Y
                     </kbd>
                     {' / '}
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       Cmd+Y
                     </kbd>
                     {' - Redo last action'}
                   </li>
                   <li>
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       Ctrl+Shift+Z
                     </kbd>
                     {' / '}
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       Cmd+Shift+Z
                     </kbd>
                     {' - Redo (alternative)'}
                   </li>
                   <li>
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       Delete
                     </kbd>
                     {' / '}
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       Backspace
                     </kbd>
                     {' - Delete selected object'}
@@ -70,27 +70,27 @@ function HelpComponent() {
                 </ul>
               </div>
 
-              <div className="border-l-4 border-green-500 bg-green-50 p-4">
-                <h3 className="font-semibold text-gray-900">Canvas</h3>
-                <ul className="mt-2 space-y-2 text-sm text-gray-700">
+              <div className="rounded-lg border border-green-200 bg-gradient-to-r from-green-100 to-green-50 p-4">
+                <h3 className="font-semibold text-zinc-900">Canvas</h3>
+                <ul className="mt-2 space-y-2 text-sm text-zinc-700">
                   <li>
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       Ctrl+C
                     </kbd>
                     {' / '}
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       Cmd+C
                     </kbd>
                     {' - Copy canvas to clipboard'}
                   </li>
                   <li>
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       ↑ ↓ ← →
                     </kbd>
                     {' - Move selected object'}
                   </li>
                   <li>
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       Escape
                     </kbd>
                     {' - Deselect object'}
@@ -98,27 +98,27 @@ function HelpComponent() {
                 </ul>
               </div>
 
-              <div className="border-l-4 border-purple-500 bg-purple-50 p-4">
-                <h3 className="font-semibold text-gray-900">Navigation</h3>
-                <ul className="mt-2 space-y-2 text-sm text-gray-700">
+              <div className="rounded-lg border border-purple-200 bg-gradient-to-r from-purple-100 to-purple-50 p-4">
+                <h3 className="font-semibold text-zinc-900">Navigation</h3>
+                <ul className="mt-2 space-y-2 text-sm text-zinc-700">
                   <li>
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       Tab
                     </kbd>
                     {' - Move focus to next element'}
                   </li>
                   <li>
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       Shift+Tab
                     </kbd>
                     {' - Move focus to previous element'}
                   </li>
                   <li>
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       Enter
                     </kbd>
                     {' / '}
-                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono">
+                    <kbd className="rounded bg-zinc-200 px-2 py-1 font-mono">
                       Space
                     </kbd>
                     {' - Activate button'}
@@ -130,10 +130,10 @@ function HelpComponent() {
 
           {/* Accessibility Features Section */}
           <section className="rounded-lg bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-xl font-semibold text-gray-900">
+            <h2 className="mb-4 text-xl font-semibold text-zinc-900">
               Accessibility Features
             </h2>
-            <div className="space-y-3 text-sm text-gray-700">
+            <div className="space-y-3 text-sm text-zinc-700">
               <p>
                 <strong>Screen Reader Support:</strong> All interactive elements
                 are labeled with descriptive ARIA labels. Screen readers will
@@ -163,10 +163,10 @@ function HelpComponent() {
 
           {/* Tips Section */}
           <section className="rounded-lg bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-xl font-semibold text-gray-900">
+            <h2 className="mb-4 text-xl font-semibold text-zinc-900">
               Tips for Efficient Editing
             </h2>
-            <ul className="space-y-2 text-sm text-gray-700">
+            <ul className="space-y-2 text-sm text-zinc-700">
               <li>
                 ✓ Use <strong>Ctrl+Z</strong> frequently to undo mistakes
               </li>
@@ -189,15 +189,15 @@ function HelpComponent() {
 
           {/* WCAG Compliance Section */}
           <section className="rounded-lg bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-xl font-semibold text-gray-900">
+            <h2 className="mb-4 text-xl font-semibold text-zinc-900">
               WCAG 2.1 Compliance
             </h2>
-            <p className="mb-3 text-sm text-gray-700">
+            <p className="mb-3 text-sm text-zinc-700">
               BCA MyCore+ is designed to meet WCAG 2.1 Level A accessibility
               standards, ensuring the application is usable by everyone,
               including people with disabilities.
             </p>
-            <div className="text-xs text-gray-600">
+            <div className="text-xs text-zinc-600">
               <p>
                 For more information about web accessibility, visit{' '}
                 <a
@@ -214,10 +214,10 @@ function HelpComponent() {
 
           {/* Contact Section */}
           <section className="rounded-lg bg-blue-50 p-6 shadow-sm">
-            <h2 className="mb-4 text-xl font-semibold text-gray-900">
+            <h2 className="mb-4 text-xl font-semibold text-zinc-900">
               Need Help?
             </h2>
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-zinc-700">
               If you encounter any accessibility issues or have suggestions for
               improvement, please contact the BCA MyCore+ team. Your feedback
               helps us make the application better for everyone.

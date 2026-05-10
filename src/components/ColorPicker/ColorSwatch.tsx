@@ -27,12 +27,12 @@ export function ColorSwatch({ color, isSelected, onSelect }: ColorSwatchProps) {
       title={color.name}
     >
       <div
-        className="h-16 w-16 rounded-lg border border-gray-200 shadow-sm"
+        className="size-16 rounded-lg border border-zinc-200 shadow-sm"
         style={{ backgroundColor: color.hex }}
       />
       <div className="text-center">
-        <div className="text-xs font-medium text-gray-700">{color.name}</div>
-        <div className="text-xs text-gray-500">{color.hex}</div>
+        <div className="text-xs font-medium text-zinc-700">{color.name}</div>
+        <div className="text-xs text-zinc-500">{color.hex}</div>
         <div
           className={`text-xs font-semibold ${meetsStandard ? 'text-green-600' : 'text-red-600'}`}
           aria-live="polite"

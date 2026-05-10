@@ -1,5 +1,5 @@
 import { X } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useReducer, useRef } from 'react'
 
 import type { ColorPalette, ColorPaletteItem } from './types'
 
@@ -15,6 +15,40 @@ interface ColorPickerProps {
   selectedColor?: string
 }
 
+type ColorPickerState = {
+  palette: ColorPalette
+  isLoading: boolean
+}
+
+type ColorPickerAction =
+  | { type: 'SET_PALETTE'; payload: ColorPalette }
+  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'START_EXTRACTION' }
+
+function colorPickerReducer(
+  state: ColorPickerState,
+  action: ColorPickerAction,
+): ColorPickerState {
+  switch (action.type) {
+    case 'SET_PALETTE':
+      return { ...state, palette: action.payload, isLoading: false }
+    case 'SET_LOADING':
+      return { ...state, isLoading: action.payload }
+    case 'START_EXTRACTION':
+      return { ...state, isLoading: true }
+    default:
+      return state
+  }
+}
+
+const initialState: ColorPickerState = {
+  palette: {
+    colors: BCA_BRAND_COLORS,
+    isDefault: true,
+  },
+  isLoading: false,
+}
+
 export function ColorPicker({
   isOpen,
   onClose,
@@ -22,11 +56,7 @@ export function ColorPicker({
   imageUrl,
   selectedColor,
 }: ColorPickerProps) {
-  const [palette, setPalette] = useState<ColorPalette>({
-    colors: BCA_BRAND_COLORS,
-    isDefault: true,
-  })
-  const [isLoading, setIsLoading] = useState(false)
+  const [state, dispatch] = useReducer(colorPickerReducer, initialState)
   const extractedRef = useRef(false)
   const { extractColors } = useColorExtraction()
 
@@ -48,18 +78,22 @@ export function ColorPicker({
 
   // Load palette when component opens or imageUrl changes
   useEffect(() => {
-    if (!isOpen || !imageUrl || !palette.isDefault || extractedRef.current) {
+    if (
+      !isOpen ||
+      !imageUrl ||
+      !state.palette.isDefault ||
+      extractedRef.current
+    ) {
       return
     }
 
     extractedRef.current = true
-    setIsLoading(true)
+    dispatch({ type: 'START_EXTRACTION' })
 
     extractColors(imageUrl).then((result) => {
-      setPalette(result)
-      setIsLoading(false)
+      dispatch({ type: 'SET_PALETTE', payload: result })
     })
-  }, [isOpen, imageUrl, palette.isDefault, extractColors])
+  }, [isOpen, imageUrl, state.palette.isDefault, extractColors])
 
   if (!isOpen) {
     return null
@@ -71,32 +105,39 @@ export function ColorPicker({
       role="dialog"
       aria-label="Color Picker"
       onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onClose()
+      }}
     >
       <div
+        role="presentation"
         className="w-full max-w-md rounded-2xl border border-white/20 bg-white/95 p-6 shadow-xl backdrop-blur-[15px]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">
-            {palette.isDefault ? 'BCA Brand Colors' : 'Extracted Colors'}
+          <h2 className="text-lg font-semibold text-neutral-800">
+            {state.palette.isDefault ? 'BCA Brand Colors' : 'Extracted Colors'}
           </h2>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-gray-100"
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') onClose()
+            }}
+            className="flex size-8 items-center justify-center rounded-lg text-zinc-600 transition-colors hover:bg-zinc-100"
             aria-label="Close Color Picker"
           >
             <X size={20} />
           </button>
         </div>
 
-        {isLoading && (
-          <div className="mb-4 text-center text-sm text-gray-600">
-            Extracting colors...
+        {state.isLoading && (
+          <div className="mb-4 text-center text-sm text-zinc-600">
+            Extracting colors…
           </div>
         )}
 
         <div className="mb-6 grid grid-cols-3 gap-3">
-          {palette.colors.map((color) => (
+          {state.palette.colors.map((color) => (
             <ColorSwatch
               key={color.hex}
               color={color}

@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 
 import { useCanvasStore } from '@/stores/canvas'
 
-// @ts-expect-error - Fabric.js v6 event types incompatibility
 export function useCanvasEvents() {
   const { fabricCanvas, selectObject } = useCanvasStore()
 

@@ -20,7 +20,7 @@ describe('Keyboard Navigation Integration Tests', () => {
       <div>
         <button>Button 1</button>
         <input type="text" />
-        <a href="#">Link</a>
+        <a href="https://example.com">Link</a>
       </div>,
     )
 
@@ -49,7 +49,7 @@ describe('Keyboard Navigation Integration Tests', () => {
   it('should announce live region updates', () => {
     const { container } = render(
       <div role="status" aria-live="polite">
-        Loading...
+        Loading…
       </div>,
     )
 

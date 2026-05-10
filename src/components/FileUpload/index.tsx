@@ -1,8 +1,70 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useReducer, useRef } from 'react'
 
 import type { FileUploadProps } from './types'
 
 import { useFileValidation } from './hooks/useFileValidation'
+
+type FileUploadState = {
+  selectedFile: File | null
+  preview: string | null
+  showPreviewModal: boolean
+  errorMessage: string | null
+  showErrorModal: boolean
+}
+
+type FileUploadAction =
+  | { type: 'SET_FILE'; payload: { file: File; preview: string } }
+  | { type: 'SHOW_ERROR'; payload: string }
+  | { type: 'CLOSE_PREVIEW' }
+  | { type: 'CLOSE_ERROR' }
+  | { type: 'RESET' }
+
+function fileUploadReducer(
+  state: FileUploadState,
+  action: FileUploadAction,
+): FileUploadState {
+  switch (action.type) {
+    case 'SET_FILE':
+      return {
+        ...state,
+        selectedFile: action.payload.file,
+        preview: action.payload.preview,
+        errorMessage: null,
+        showPreviewModal: true,
+        showErrorModal: false,
+      }
+    case 'SHOW_ERROR':
+      return {
+        ...state,
+        selectedFile: null,
+        preview: null,
+        errorMessage: action.payload,
+        showPreviewModal: false,
+        showErrorModal: true,
+      }
+    case 'CLOSE_PREVIEW':
+    case 'CLOSE_ERROR':
+    case 'RESET':
+      return {
+        ...state,
+        selectedFile: null,
+        preview: null,
+        errorMessage: null,
+        showPreviewModal: false,
+        showErrorModal: false,
+      }
+    default:
+      return state
+  }
+}
+
+const initialState: FileUploadState = {
+  selectedFile: null,
+  preview: null,
+  showPreviewModal: false,
+  errorMessage: null,
+  showErrorModal: false,
+}
 
 export function FileUpload({
   onFileSelected,
@@ -10,12 +72,7 @@ export function FileUpload({
   className,
 }: FileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [preview, setPreview] = useState<string | null>(null)
-  const [showPreviewModal, setShowPreviewModal] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [showErrorModal, setShowErrorModal] = useState(false)
-
+  const [state, dispatch] = useReducer(fileUploadReducer, initialState)
   const { validateFile } = useFileValidation()
 
   const handleFileChange = useCallback(
@@ -25,8 +82,10 @@ export function FileUpload({
 
       const validation = validateFile(file)
       if (!validation.valid) {
-        setErrorMessage(validation.error || 'Validasi gagal')
-        setShowErrorModal(true)
+        dispatch({
+          type: 'SHOW_ERROR',
+          payload: validation.error || 'Validasi gagal',
+        })
         onError?.(validation.error || 'Validasi gagal')
         if (fileInputRef.current) {
           fileInputRef.current.value = ''
@@ -35,19 +94,14 @@ export function FileUpload({
         return
       }
 
-      setSelectedFile(file)
-      setErrorMessage(null)
-
       const reader = new FileReader()
       reader.onload = (e) => {
         const dataUrl = e.target?.result as string
-        setPreview(dataUrl)
-        setShowPreviewModal(true)
+        dispatch({ type: 'SET_FILE', payload: { file, preview: dataUrl } })
       }
 
       reader.onerror = () => {
-        setErrorMessage('Upload gagal. Coba lagi?')
-        setShowErrorModal(true)
+        dispatch({ type: 'SHOW_ERROR', payload: 'Upload gagal. Coba lagi?' })
         onError?.('Upload gagal. Coba lagi?')
       }
 
@@ -57,45 +111,38 @@ export function FileUpload({
   )
 
   const handleConfirmUpload = useCallback(() => {
-    if (selectedFile && preview) {
-      onFileSelected?.(selectedFile, preview)
-      setShowPreviewModal(false)
-      setSelectedFile(null)
-      setPreview(null)
+    if (state.selectedFile && state.preview) {
+      onFileSelected?.(state.selectedFile, state.preview)
+      dispatch({ type: 'CLOSE_PREVIEW' })
       if (fileInputRef.current) {
         fileInputRef.current.value = ''
       }
     }
-  }, [selectedFile, preview, onFileSelected])
+  }, [state.selectedFile, state.preview, onFileSelected])
 
   const handleCancelPreview = useCallback(() => {
-    setShowPreviewModal(false)
-    setSelectedFile(null)
-    setPreview(null)
+    dispatch({ type: 'CLOSE_PREVIEW' })
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
   }, [])
 
   const handleChooseAnother = useCallback(() => {
-    setShowErrorModal(false)
-    setErrorMessage(null)
+    dispatch({ type: 'CLOSE_ERROR' })
     if (fileInputRef.current) {
       fileInputRef.current.click()
     }
   }, [])
 
   const handleCancelError = useCallback(() => {
-    setShowErrorModal(false)
-    setErrorMessage(null)
+    dispatch({ type: 'CLOSE_ERROR' })
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
   }, [])
 
   const handleRetryError = useCallback(() => {
-    setShowErrorModal(false)
-    setErrorMessage(null)
+    dispatch({ type: 'CLOSE_ERROR' })
     if (fileInputRef.current) {
       fileInputRef.current.click()
     }
@@ -126,9 +173,9 @@ export function FileUpload({
         Supported formats: PNG, JPG, SVG, WebP. Maximum file size: 5MB.
       </div>
 
-      {showPreviewModal && preview && selectedFile && (
+      {state.showPreviewModal && state.preview && state.selectedFile && (
         <div
-          className="bg-opacity-50 fixed inset-0 flex items-center justify-center bg-black"
+          className="bg-opacity-50 fixed inset-0 flex items-center justify-center bg-neutral-950"
           role="dialog"
           aria-modal="true"
           aria-labelledby="preview-modal-title"
@@ -139,18 +186,18 @@ export function FileUpload({
             </h2>
 
             <img
-              src={preview}
+              src={state.preview}
               alt="Preview"
               className="mb-4 h-48 w-full object-contain"
             />
 
             <div className="mb-4 space-y-2 text-sm">
               <p>
-                <strong>Nama File:</strong> {selectedFile.name}
+                <strong>Nama File:</strong> {state.selectedFile.name}
               </p>
               <p>
                 <strong>Ukuran:</strong>{' '}
-                {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                {(state.selectedFile.size / 1024 / 1024).toFixed(2)} MB
               </p>
             </div>
 
@@ -163,7 +210,7 @@ export function FileUpload({
               </button>
               <button
                 onClick={handleCancelPreview}
-                className="flex-1 rounded-lg bg-gray-400 px-4 py-2 text-white hover:bg-gray-500"
+                className="flex-1 rounded-lg bg-zinc-400 px-4 py-2 text-white hover:bg-zinc-500"
               >
                 Batal
               </button>
@@ -172,9 +219,9 @@ export function FileUpload({
         </div>
       )}
 
-      {showErrorModal && errorMessage && (
+      {state.showErrorModal && state.errorMessage && (
         <div
-          className="bg-opacity-50 fixed inset-0 flex items-center justify-center bg-black"
+          className="bg-opacity-50 fixed inset-0 flex items-center justify-center bg-neutral-950"
           role="alertdialog"
           aria-modal="true"
           aria-labelledby="error-modal-title"
@@ -188,12 +235,12 @@ export function FileUpload({
               Error
             </h2>
 
-            <p id="error-modal-message" className="mb-6 text-gray-700">
-              {errorMessage}
+            <p id="error-modal-message" className="mb-6 text-zinc-700">
+              {state.errorMessage}
             </p>
 
             <div className="flex gap-2">
-              {errorMessage.includes('Upload gagal') ? (
+              {state.errorMessage.includes('Upload gagal') ? (
                 <>
                   <button
                     onClick={handleRetryError}
@@ -203,7 +250,7 @@ export function FileUpload({
                   </button>
                   <button
                     onClick={handleCancelError}
-                    className="flex-1 rounded-lg bg-gray-400 px-4 py-2 text-white hover:bg-gray-500"
+                    className="flex-1 rounded-lg bg-zinc-400 px-4 py-2 text-white hover:bg-zinc-500"
                   >
                     Batal
                   </button>
@@ -218,7 +265,7 @@ export function FileUpload({
                   </button>
                   <button
                     onClick={handleCancelError}
-                    className="flex-1 rounded-lg bg-gray-400 px-4 py-2 text-white hover:bg-gray-500"
+                    className="flex-1 rounded-lg bg-zinc-400 px-4 py-2 text-white hover:bg-zinc-500"
                   >
                     Batal
                   </button>

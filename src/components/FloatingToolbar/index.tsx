@@ -171,7 +171,7 @@ export function FloatingToolbar() {
     >
       <button
         onClick={handleOpenColorPicker}
-        className="flex h-12 w-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20"
+        className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20"
         aria-label="Change Color"
         title="Change Color"
       >
@@ -187,7 +187,7 @@ export function FloatingToolbar() {
 
       <button
         onClick={handleDelete}
-        className="flex h-12 w-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20"
+        className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20"
         aria-label="Delete Object"
         title="Delete Object"
       >
@@ -196,7 +196,7 @@ export function FloatingToolbar() {
 
       <button
         onClick={() => fileInputRef.current?.click()}
-        className="flex h-12 w-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20"
+        className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20"
         aria-label="Upload Photo"
         title="Upload Photo"
       >
@@ -219,7 +219,7 @@ export function FloatingToolbar() {
           <button
             onClick={() => handleFontSizeChange(2)}
             disabled={!isText}
-            className="flex h-12 w-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Increase Font Size"
             title="Increase Font Size"
           >
@@ -229,7 +229,7 @@ export function FloatingToolbar() {
           <button
             onClick={() => handleFontSizeChange(-2)}
             disabled={!isText}
-            className="flex h-12 w-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Decrease Font Size"
             title="Decrease Font Size"
           >
@@ -239,7 +239,7 @@ export function FloatingToolbar() {
           <button
             onClick={handleBoldToggle}
             disabled={!isText}
-            className="flex h-12 w-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Bold"
             title="Bold"
           >
@@ -249,7 +249,7 @@ export function FloatingToolbar() {
           <button
             onClick={handleItalicToggle}
             disabled={!isText}
-            className="flex h-12 w-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex size-12 items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Italic"
             title="Italic"
           >

@@ -9,9 +9,9 @@ const FloatingToolbarComponent = lazy(() =>
 function FloatingToolbarSkeleton() {
   return (
     <div className="fixed z-50 flex animate-pulse items-center gap-2 rounded-xl border border-white/20 bg-white/80 p-3 shadow-lg backdrop-blur-[15px]">
-      <div className="h-12 w-12 rounded-lg bg-gray-300" />
-      <div className="h-12 w-12 rounded-lg bg-gray-300" />
-      <div className="h-12 w-12 rounded-lg bg-gray-300" />
+      <div className="size-12 rounded-lg bg-zinc-300" />
+      <div className="size-12 rounded-lg bg-zinc-300" />
+      <div className="size-12 rounded-lg bg-zinc-300" />
     </div>
   )
 }

@@ -40,11 +40,7 @@ function IndexComponent() {
 
       <section className="flex border-t border-(--border) text-left max-lg:flex-col max-lg:text-center">
         <div className="flex-1 border-r border-(--border) p-8 max-lg:border-r-0 max-lg:border-b max-lg:px-5 max-lg:py-6">
-          <svg
-            className="mb-4 h-5.5 w-5.5"
-            role="presentation"
-            aria-hidden="true"
-          >
+          <svg className="mb-4 size-5.5" role="presentation" aria-hidden="true">
             <use href="/icons.svg#documentation-icon"></use>
           </svg>
           <h2>Documentation</h2>

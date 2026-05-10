@@ -1,4 +1,3 @@
-// @ts-ignore - Fabric.js v6 type definitions issue
 import type { Canvas } from 'fabric'
 
 import { create } from 'zustand'
@@ -13,7 +12,7 @@ import { useHistoryStore } from '@/stores/history'
 /**
  * Serialized object for persistence and state management
  */
-export interface SerializedObject {
+interface SerializedObject {
   id: string
   type: 'text' | 'image' | 'rect' | 'circle'
   left: number
@@ -135,7 +134,7 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     const id = `obj_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
 
     if (type === 'text') {
-      const { Textbox } = await import('fabric/es')
+      const { Textbox } = await import('fabric')
       obj = new Textbox('New Text', {
         left: fabricCanvas.width! / 2,
         top: fabricCanvas.height! / 2,
@@ -152,7 +151,7 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
         return ''
       }
 
-      const { FabricImage } = await import('fabric/es')
+      const { FabricImage } = await import('fabric')
       FabricImage.fromURL(imageUrl, { crossOrigin: 'anonymous' })
         .then((img: any) => {
           img.set({
