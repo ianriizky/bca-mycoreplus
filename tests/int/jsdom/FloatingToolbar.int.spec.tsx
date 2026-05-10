@@ -1,12 +1,33 @@
+import type { Canvas } from 'fabric'
+
 import { render, screen, act } from '@testing-library/react'
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 import { FloatingToolbar } from '@/components/FloatingToolbar'
 import { useCanvasStore } from '@/stores/canvas'
 
+type MockObject = {
+  id: string
+  type: string
+  fontSize?: number
+  getBoundingRect: () => {
+    left: number
+    top: number
+    width: number
+    height: number
+  }
+}
+
+function createMockCanvas(objects: MockObject[]): Canvas {
+  return {
+    getObjects: vi.fn(() => objects),
+    discardActiveObject: vi.fn(),
+    requestRenderAll: vi.fn(),
+  } as unknown as Canvas
+}
+
 describe('FloatingToolbar', () => {
   beforeEach(() => {
-    // Reset store before each test
     useCanvasStore.setState({
       selectedObjectId: null,
       fabricCanvas: null,
@@ -21,25 +42,22 @@ describe('FloatingToolbar', () => {
     })
 
     it('should appear when an object is selected', () => {
-      // Mock canvas and selected object
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'text',
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-      }
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'text',
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ])
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       const { container } = render(<FloatingToolbar />)
@@ -48,24 +66,22 @@ describe('FloatingToolbar', () => {
     })
 
     it('should have aria-hidden=false when visible', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'text',
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-      }
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'text',
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ])
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       const { container } = render(<FloatingToolbar />)
@@ -76,24 +92,22 @@ describe('FloatingToolbar', () => {
 
   describe('AC2: Glassmorphism Styling', () => {
     it('should have glassmorphism classes applied', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'text',
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-      }
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'text',
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ])
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       const { container } = render(<FloatingToolbar />)
@@ -110,24 +124,22 @@ describe('FloatingToolbar', () => {
 
   describe('AC3: Brand Colors', () => {
     it('should use BCA brand colors for text', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'text',
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-      }
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'text',
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ])
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       const { container } = render(<FloatingToolbar />)
@@ -141,24 +153,22 @@ describe('FloatingToolbar', () => {
 
   describe('AC4: Toolbar Actions', () => {
     it('should have color picker button', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'text',
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-      }
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'text',
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ])
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       render(<FloatingToolbar />)
@@ -167,24 +177,22 @@ describe('FloatingToolbar', () => {
     })
 
     it('should have delete button', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'text',
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-      }
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'text',
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ])
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       render(<FloatingToolbar />)
@@ -193,24 +201,22 @@ describe('FloatingToolbar', () => {
     })
 
     it('should have photo upload button', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'text',
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-      }
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'text',
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ])
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       render(<FloatingToolbar />)
@@ -221,25 +227,23 @@ describe('FloatingToolbar', () => {
 
   describe('AC5: Context-Sensitive Actions', () => {
     it('should show font size controls for text objects', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'text',
-            fontSize: 16,
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-      }
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'text',
+          fontSize: 16,
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ])
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       render(<FloatingToolbar />)
@@ -251,24 +255,22 @@ describe('FloatingToolbar', () => {
     })
 
     it('should not show font size controls for non-text objects', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'image',
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-      }
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'image',
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ])
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       render(<FloatingToolbar />)
@@ -279,24 +281,22 @@ describe('FloatingToolbar', () => {
 
   describe('AC7: Accessibility', () => {
     it('should have proper ARIA attributes', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'text',
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-      }
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'text',
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ])
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       const { container } = render(<FloatingToolbar />)
@@ -307,24 +307,22 @@ describe('FloatingToolbar', () => {
     })
 
     it('should have aria-label on all buttons', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'text',
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-      }
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'text',
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ])
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       render(<FloatingToolbar />)
@@ -338,24 +336,22 @@ describe('FloatingToolbar', () => {
 
   describe('AC6: Positioning', () => {
     it('should position toolbar above selected object', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'text',
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-      }
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'text',
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ])
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       const { container } = render(<FloatingToolbar />)
@@ -367,24 +363,22 @@ describe('FloatingToolbar', () => {
     })
 
     it('should have fixed positioning', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'text',
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-      }
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'text',
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ])
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       const { container } = render(<FloatingToolbar />)
@@ -396,26 +390,25 @@ describe('FloatingToolbar', () => {
 
   describe('Edge Cases', () => {
     it('should handle keyboard escape key to deselect', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'text',
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-        discardActiveObject: vi.fn(),
-        requestRenderAll: vi.fn(),
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'text',
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ]) as unknown as Canvas & {
+        discardActiveObject: ReturnType<typeof vi.fn>
+        requestRenderAll: ReturnType<typeof vi.fn>
       }
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       render(<FloatingToolbar />)
@@ -429,24 +422,22 @@ describe('FloatingToolbar', () => {
     })
 
     it('should reject files that are not images', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'image',
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-      }
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'image',
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ])
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       render(<FloatingToolbar />)
@@ -455,62 +446,57 @@ describe('FloatingToolbar', () => {
     })
 
     it('should enforce minimum font size of 8px', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'text',
-            fontSize: 10,
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-      }
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'text',
+          fontSize: 10,
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ])
 
       const updateObjectMock = vi.fn()
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
         updateObject: updateObjectMock,
       })
 
       render(<FloatingToolbar />)
       const decreaseButton = screen.getByLabelText('Decrease Font Size')
 
-      // Click decrease button multiple times to test minimum
       decreaseButton.click()
       decreaseButton.click()
 
-      // Should not go below 8px
       const lastCall =
         updateObjectMock.mock.calls[updateObjectMock.mock.calls.length - 1]
       expect(lastCall[1].fontSize).toBeGreaterThanOrEqual(8)
     })
 
     it('should open color picker when color button is clicked', () => {
-      const mockCanvas = {
-        getObjects: vi.fn(() => [
-          {
-            id: 'obj_1',
-            type: 'text',
-            getBoundingRect: () => ({
-              left: 100,
-              top: 100,
-              width: 50,
-              height: 50,
-            }),
-          },
-        ]),
-        discardActiveObject: vi.fn(),
+      const mockCanvas = createMockCanvas([
+        {
+          id: 'obj_1',
+          type: 'text',
+          getBoundingRect: () => ({
+            left: 100,
+            top: 100,
+            width: 50,
+            height: 50,
+          }),
+        },
+      ]) as unknown as Canvas & {
+        discardActiveObject: ReturnType<typeof vi.fn>
       }
 
       useCanvasStore.setState({
         selectedObjectId: 'obj_1',
-        fabricCanvas: mockCanvas as any,
+        fabricCanvas: mockCanvas,
       })
 
       render(<FloatingToolbar />)

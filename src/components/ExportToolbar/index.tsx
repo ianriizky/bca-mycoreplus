@@ -1,5 +1,6 @@
 import { UndoRedoButtons } from '@/components/UndoRedoButtons'
 
+import { AddTextButton } from './AddTextButton'
 import { CopyButton } from './CopyButton'
 import { DownloadButton } from './DownloadButton'
 import { WhatsAppButton } from './WhatsAppButton'
@@ -12,6 +13,7 @@ export function ExportToolbar() {
       aria-label="Export and sharing options"
     >
       <UndoRedoButtons />
+      <AddTextButton />
       <CopyButton />
       <WhatsAppButton />
       <DownloadButton />

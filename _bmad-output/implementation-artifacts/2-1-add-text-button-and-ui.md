@@ -1,6 +1,6 @@
 # Story 2-1: Add Text Button & UI
 
-**Status:** ready-for-dev
+**Status:** review
 **Epic:** Epic 2 - MVP Improvements & UX Refinement
 **Story ID:** 2-1
 **Story Key:** 2-1-add-text-button-and-ui
@@ -301,3 +301,74 @@ export function CanvasEditor() {
 
 **Retrospective Source:** `_bmad-output/implementation-artifacts/epic-1-retro-2026-05-10.md`
 **Gap Analysis Source:** `_bmad-output/implementation-artifacts/retrospective-epic1-canvas-editor-gap-analysis.md`
+
+---
+
+## Dev Agent Record
+
+### Debug Log
+
+- **Unused import fix**: Initial implementation had unused `useCallback` import in `AddTextButton.tsx`. Fixed by removing it to pass lint.
+- **Bug Fix 1 - Font Size Controls**: `isTextObject` only matched `type === 'text'` but Fabric.js Textbox uses `'textbox'`. Fixed by checking `['text', 'textbox', 'i-text']`.
+- **Bug Fix 2 - SafeZoneOverlay Misalignment**: Canvas scaled with `w-full` but overlay used center positioning on parent. Fixed by using `inline-block` wrapper and `absolute inset-0` overlay.
+- **Bug Fix 3 - SafeZoneOverlay Blocking Canvas**: Overlay `pointer-events-none` propagated to toggle button. Fixed by adding `pointer-events-auto` to button.
+- **Bug Fix 4 - Import Error**: `fabric.d.ts` not recognized as module with `verbatimModuleSyntax: true`. Fixed by renaming to `fabric.ts`.
+- **Feature Added - Custom Color Input**: Added HTML native color picker in FloatingToolbar text section for custom text color selection.
+
+### Completion Notes
+
+Story 2-1 successfully implemented and verified:
+
+- **AddTextButton component**: Created at `src/components/ExportToolbar/AddTextButton.tsx` with BCA styling (blue-600 button with Type icon)
+- **Keyboard shortcut hook**: Created `useAddTextShortcuts.ts` with T key support, properly ignoring events when typing in inputs
+- **Integration**: Added to ExportToolbar and CanvasEditor as specified
+- **Tests**: 14 unit tests added (6 for AddTextButton, 8 for useAddTextShortcuts) - all passing
+- **Verification**:
+  - Build passes (dist files generated)
+  - TypeScript: No errors (lsp_diagnostics clean)
+  - Tests: 212 passed, 1 skipped
+  - All 5 acceptance criteria met (AC1-AC5)
+
+### Implementation Plan
+
+1. Created AddTextButton following existing button patterns (WhatsAppButton, CopyButton)
+2. Wired to existing `addObject('text')` store method (no reimplementation needed)
+3. Created keyboard shortcut hook following existing patterns (useCopyShortcut, useUndoRedoShortcuts)
+4. Applied glassmorphism styling consistent with project design system
+5. Added comprehensive unit tests covering AC1-AC5
+
+---
+
+## File List
+
+### Files Created
+
+| File                                                                            | Lines | Purpose                            |
+| ------------------------------------------------------------------------------- | ----- | ---------------------------------- |
+| `src/components/ExportToolbar/AddTextButton.tsx`                                | 23    | Add Text button component          |
+| `src/components/CanvasEditor/hooks/useAddTextShortcuts.ts`                      | 31    | T key keyboard shortcut hook       |
+| `tests/int/unit/unit/components/ExportToolbar/AddTextButton.test.tsx`           | 68    | Unit tests for AddTextButton       |
+| `tests/int/unit/unit/components/CanvasEditor/hooks/useAddTextShortcuts.test.ts` | 146   | Unit tests for useAddTextShortcuts |
+
+### Files Modified
+
+| File                                                       | Lines Added | Purpose                                         |
+| ---------------------------------------------------------- | ----------- | ----------------------------------------------- |
+| `src/components/ExportToolbar/index.tsx`                   | +3          | Import and render AddTextButton                 |
+| `src/components/CanvasEditor/index.tsx`                    | +2          | Import and call useAddTextShortcuts             |
+| `src/components/FloatingToolbar/index.tsx`                 | +2          | Fix isTextObject to recognize Fabric text types |
+| `src/components/FloatingToolbar/index.tsx`                 | +31         | Custom color input, fix isTextObject            |
+| `src/components/SafeZoneOverlay/index.tsx`                 | +2          | Fix positioning to align with canvas            |
+| `src/types/fabric.ts`                                      | +52         | Renamed from .d.ts to resolve import error      |
+| `_bmad-output/implementation-artifacts/sprint-status.yaml` | +1          | Status update                                   |
+
+---
+
+## Change Log
+
+| Date       | Change                                                                                     | By        |
+| ---------- | ------------------------------------------------------------------------------------------ | --------- |
+| 2026-05-10 | Story 2-1 implemented - Add Text Button & Keyboard Shortcut                                | Dev Agent |
+| 2026-05-10 | Bug fixes: Font size controls, SafeZoneOverlay alignment                                   | Dev Agent |
+| 2026-05-10 | Bug fixes: Font size controls, SafeZoneOverlay alignment, pointer-events, fabric.ts rename | Dev Agent |
+| 2026-05-10 | Feature: Custom color input for text in FloatingToolbar                                    | Dev Agent |

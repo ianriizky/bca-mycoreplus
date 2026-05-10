@@ -1,6 +1,11 @@
 import { useEffect } from 'react'
 
 import { useCanvasStore } from '@/stores/canvas'
+import {
+  type SelectionCreatedEvent,
+  type SelectionUpdatedEvent,
+  type TextEditingEvent,
+} from '@/types/fabric'
 
 export function useCanvasEvents() {
   const { fabricCanvas, selectObject } = useCanvasStore()
@@ -8,17 +13,17 @@ export function useCanvasEvents() {
   useEffect(() => {
     if (!fabricCanvas) return
 
-    const handleSelectionCreated = (e: any) => {
+    const handleSelectionCreated = (e: SelectionCreatedEvent) => {
       if (e.selected?.[0]) {
-        const obj = e.selected[0]
-        selectObject((obj as any).id || '')
+        const obj = e.selected[0] as { id?: string }
+        selectObject(obj.id || '')
       }
     }
 
-    const handleSelectionUpdated = (e: any) => {
+    const handleSelectionUpdated = (e: SelectionUpdatedEvent) => {
       if (e.selected?.[0]) {
-        const obj = e.selected[0]
-        selectObject((obj as any).id || '')
+        const obj = e.selected[0] as { id?: string }
+        selectObject(obj.id || '')
       }
     }
 
@@ -26,29 +31,23 @@ export function useCanvasEvents() {
       selectObject(null)
     }
 
-    const handleTextEditingEntered = (e: any) => {
-      const obj = e.target
-      if (obj) {
-        selectObject((obj as any).id || '')
+    const handleTextEditingEntered = (e: TextEditingEvent) => {
+      if (e.target) {
+        const obj = e.target as { id?: string }
+        selectObject(obj.id || '')
       }
     }
 
-    const handleTextChanged = (e: any) => {
-      const obj = e.target
-      if (obj) {
-        fabricCanvas.requestRenderAll()
-      }
+    const handleTextChanged = () => {
+      fabricCanvas.requestRenderAll()
     }
 
     const handleObjectAdded = () => {
       fabricCanvas.requestRenderAll()
     }
 
-    const handleObjectModified = (e: any) => {
-      const obj = e.target
-      if (obj) {
-        fabricCanvas.requestRenderAll()
-      }
+    const handleObjectModified = () => {
+      fabricCanvas.requestRenderAll()
     }
 
     fabricCanvas.on('selection:created', handleSelectionCreated)

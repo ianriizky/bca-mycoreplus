@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 
+import type { FabricObjectWithId } from '@/types/fabric'
+
 import { useCanvasStore } from '@/stores/canvas'
 
 export function useKeyboardNav() {
@@ -24,27 +26,28 @@ export function useKeyboardNav() {
         e.preventDefault()
         const obj = fabricCanvas
           .getObjects()
-          .find((o: any) => (o as any).id === selectedObjectId)
+          .find((o) => (o as FabricObjectWithId).id === selectedObjectId)
 
         if (!obj) return
 
         const step = e.shiftKey ? 10 : 1
+        const fabricObj = obj as FabricObjectWithId
 
         switch (e.key) {
           case 'ArrowUp':
-            obj.set({ top: (obj as any).top - step })
+            fabricObj.set({ top: (fabricObj.top ?? 0) - step })
             break
 
           case 'ArrowDown':
-            obj.set({ top: (obj as any).top + step })
+            fabricObj.set({ top: (fabricObj.top ?? 0) + step })
             break
 
           case 'ArrowLeft':
-            obj.set({ left: (obj as any).left - step })
+            fabricObj.set({ left: (fabricObj.left ?? 0) - step })
             break
 
           case 'ArrowRight':
-            obj.set({ left: (obj as any).left + step })
+            fabricObj.set({ left: (fabricObj.left ?? 0) + step })
             break
         }
 
@@ -64,14 +67,14 @@ export function useKeyboardNav() {
         if (objects.length === 0) return
 
         const currentIndex = objects.findIndex(
-          (o: any) => (o as any).id === selectedObjectId,
+          (o) => (o as FabricObjectWithId).id === selectedObjectId,
         )
         const nextIndex = e.shiftKey
           ? (currentIndex - 1 + objects.length) % objects.length
           : (currentIndex + 1) % objects.length
 
         const nextObj = objects[nextIndex]
-        selectObject((nextObj as any).id || '')
+        selectObject((nextObj as FabricObjectWithId).id || '')
       }
     }
 

@@ -1,6 +1,11 @@
-import type { Canvas } from 'fabric'
+import type { Canvas, FabricImage, FabricObject } from 'fabric'
 
 import { create } from 'zustand'
+
+import type {
+  SelectionCreatedEvent,
+  SelectionUpdatedEvent,
+} from '@/types/fabric'
 
 import {
   deserializeCanvasState,
@@ -9,9 +14,6 @@ import {
 import { loadFabric } from '@/lib/fabric-loader'
 import { useHistoryStore } from '@/stores/history'
 
-/**
- * Serialized object for persistence and state management
- */
 interface SerializedObject {
   id: string
   type: 'text' | 'image' | 'rect' | 'circle'
@@ -36,7 +38,6 @@ interface CanvasStore {
     future: SerializedObject[][]
   }
 
-  // Actions
   initCanvas: (el: HTMLCanvasElement) => Promise<void>
   disposeCanvas: () => void
   addObject: (
@@ -52,6 +53,14 @@ interface CanvasStore {
   redo: () => void
 }
 
+function getObjectById(canvas: Canvas, id: string): FabricObject | undefined {
+  return canvas.getObjects().find((o) => (o as { id?: string }).id === id)
+}
+
+function hasObjectId(obj: SerializedObject, id: string): boolean {
+  return obj.id === id
+}
+
 export const useCanvasStore = create<CanvasStore>((set, get) => ({
   fabricCanvas: null,
   objects: [],
@@ -64,11 +73,7 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     future: [],
   },
 
-  /**
-   * Initialize Fabric.js canvas with element
-   */
   initCanvas: async (el: HTMLCanvasElement) => {
-    // Clean up existing canvas if present
     const { fabricCanvas } = get()
     if (fabricCanvas) {
       fabricCanvas.dispose()
@@ -85,18 +90,17 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
 
     set({ fabricCanvas: canvas })
 
-    // Handle selection changes
-    canvas.on('selection:created', (e: any) => {
+    canvas.on('selection:created', (e: SelectionCreatedEvent) => {
       if (e.selected?.[0]) {
-        const obj = e.selected[0]
-        get().selectObject((obj as any).id || '')
+        const obj = e.selected[0] as { id?: string }
+        get().selectObject(obj.id || '')
       }
     })
 
-    canvas.on('selection:updated', (e: any) => {
+    canvas.on('selection:updated', (e: SelectionUpdatedEvent) => {
       if (e.selected?.[0]) {
-        const obj = e.selected[0]
-        get().selectObject((obj as any).id || '')
+        const obj = e.selected[0] as { id?: string }
+        get().selectObject(obj.id || '')
       }
     })
 
@@ -105,9 +109,6 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     })
   },
 
-  /**
-   * Dispose Fabric.js canvas
-   */
   disposeCanvas: () => {
     const { fabricCanvas } = get()
     if (fabricCanvas) {
@@ -116,9 +117,6 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     }
   },
 
-  /**
-   * Add text or image object to canvas
-   */
   addObject: async (
     type: 'text' | 'image',
     props?: Record<string, unknown>,
@@ -130,82 +128,76 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
       return ''
     }
 
-    let obj: any
-    const id = `obj_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    const id = `obj_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`
 
     if (type === 'text') {
       const { Textbox } = await import('fabric')
-      obj = new Textbox('New Text', {
+      const obj = new Textbox('New Text', {
         left: fabricCanvas.width! / 2,
         top: fabricCanvas.height! / 2,
         fontSize: 48,
         fill: '#0B1F3A',
         fontFamily: 'system-ui',
       })
-      obj.set({ id })
-    } else if (type === 'image') {
-      const imageUrl = props?.imageUrl as string
-      if (!imageUrl) {
-        console.warn('Image URL required for image object')
+      ;(obj as unknown as { id: string }).id = id
 
-        return ''
-      }
+      fabricCanvas.add(obj)
+      fabricCanvas.setActiveObject(obj)
+      fabricCanvas.requestRenderAll()
 
-      const { FabricImage } = await import('fabric')
-      FabricImage.fromURL(imageUrl, { crossOrigin: 'anonymous' })
-        .then((img: any) => {
-          img.set({
-            left: fabricCanvas.width! / 2,
-            top: fabricCanvas.height! / 2,
-          })
-          // Add custom id property
-          img.set({ id })
-          fabricCanvas.add(img)
-          fabricCanvas.setActiveObject(img)
-          fabricCanvas.requestRenderAll()
+      const serialized = fabricCanvas.toJSON()
+      set((state) => ({
+        objects: [...state.objects, serialized as unknown as SerializedObject],
+      }))
 
-          // Serialize and store object
-          const serialized = fabricCanvas.toJSON()
-          set((state) => ({
-            objects: [...state.objects, serialized],
-          }))
-
-          // Push to history
-          const historyStore = useHistoryStore.getState()
-          historyStore.pushHistory(serializeCanvasState(fabricCanvas))
-        })
-        .catch((err: any) => {
-          console.error('Failed to load image:', err)
-        })
+      const historyStore = useHistoryStore.getState()
+      historyStore.pushHistory(serializeCanvasState(fabricCanvas))
 
       return id
     }
 
-    fabricCanvas.add(obj)
-    fabricCanvas.setActiveObject(obj)
-    fabricCanvas.requestRenderAll()
+    const imageUrl = props?.imageUrl as string
+    if (!imageUrl) {
+      console.warn('Image URL required for image object')
 
-    // Serialize and store object
-    const serialized = fabricCanvas.toJSON()
-    set((state) => ({
-      objects: [...state.objects, serialized],
-    }))
+      return ''
+    }
 
-    // Push to history
-    const historyStore = useHistoryStore.getState()
-    historyStore.pushHistory(serializeCanvasState(fabricCanvas))
+    const { FabricImage: ImportedFabricImage } = await import('fabric')
+    ImportedFabricImage.fromURL(imageUrl, { crossOrigin: 'anonymous' })
+      .then((img: FabricImage) => {
+        img.set({
+          left: fabricCanvas.width! / 2,
+          top: fabricCanvas.height! / 2,
+        })
+        ;(img as unknown as { id: string }).id = id
+        fabricCanvas.add(img)
+        fabricCanvas.setActiveObject(img)
+        fabricCanvas.requestRenderAll()
+
+        const serialized = fabricCanvas.toJSON()
+        set((state) => ({
+          objects: [
+            ...state.objects,
+            serialized as unknown as SerializedObject,
+          ],
+        }))
+
+        const historyStore = useHistoryStore.getState()
+        historyStore.pushHistory(serializeCanvasState(fabricCanvas))
+      })
+      .catch((err: unknown) => {
+        console.error('Failed to load image:', err)
+      })
 
     return id
   },
 
-  /**
-   * Update object properties
-   */
   updateObject: (id: string, props: Record<string, unknown>) => {
     const { fabricCanvas, objects } = get()
     if (!fabricCanvas) return
 
-    const obj = fabricCanvas.getObjects().find((o: any) => (o as any).id === id)
+    const obj = getObjectById(fabricCanvas, id)
     if (!obj) {
       console.warn(`Object with id ${id} not found`)
 
@@ -215,25 +207,22 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     Object.assign(obj, props)
     fabricCanvas.requestRenderAll()
 
-    // Update serialized objects
-    const newObjects = objects.map((o: any) =>
-      (o as any).id === id ? fabricCanvas.toJSON() : o,
+    const newObjects = objects.map((o) =>
+      hasObjectId(o, id)
+        ? (fabricCanvas.toJSON() as unknown as SerializedObject)
+        : o,
     )
     set({ objects: newObjects })
 
-    // Push to history
     const historyStore = useHistoryStore.getState()
     historyStore.pushHistory(serializeCanvasState(fabricCanvas))
   },
 
-  /**
-   * Delete object from canvas
-   */
   deleteObject: (id: string) => {
     const { fabricCanvas, objects } = get()
     if (!fabricCanvas) return
 
-    const obj = fabricCanvas.getObjects().find((o: any) => (o as any).id === id)
+    const obj = getObjectById(fabricCanvas, id)
     if (!obj) {
       console.warn(`Object with id ${id} not found`)
 
@@ -244,18 +233,13 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     fabricCanvas.discardActiveObject()
     fabricCanvas.requestRenderAll()
 
-    // Remove from serialized objects
-    const newObjects = objects.filter((o: any) => (o as any).id !== id)
+    const newObjects = objects.filter((o) => !hasObjectId(o, id))
     set({ objects: newObjects, selectedObjectId: null })
 
-    // Push to history
     const historyStore = useHistoryStore.getState()
     historyStore.pushHistory(serializeCanvasState(fabricCanvas))
   },
 
-  /**
-   * Select object by ID
-   */
   selectObject: (id: string | null) => {
     set({ selectedObjectId: id })
 
@@ -263,9 +247,7 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     if (!fabricCanvas) return
 
     if (id) {
-      const obj = fabricCanvas
-        .getObjects()
-        .find((o: any) => (o as any).id === id)
+      const obj = getObjectById(fabricCanvas, id)
       if (obj) {
         fabricCanvas.setActiveObject(obj)
         fabricCanvas.requestRenderAll()
@@ -276,14 +258,11 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     }
   },
 
-  /**
-   * Apply color to object
-   */
   applyColor: (id: string, color: string) => {
     const { fabricCanvas } = get()
     if (!fabricCanvas) return
 
-    const obj = fabricCanvas.getObjects().find((o: any) => (o as any).id === id)
+    const obj = getObjectById(fabricCanvas, id)
     if (!obj) {
       console.warn(`Object with id ${id} not found`)
 
@@ -294,9 +273,6 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     fabricCanvas.requestRenderAll()
   },
 
-  /**
-   * Initialize clipboard support detection
-   */
   initClipboardSupport: async () => {
     const supported =
       typeof navigator !== 'undefined' &&
@@ -306,9 +282,6 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     set({ clipboardSupported: supported })
   },
 
-  /**
-   * Undo last action
-   */
   undo: () => {
     const { fabricCanvas } = get()
     if (!fabricCanvas) return
@@ -321,9 +294,6 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     }
   },
 
-  /**
-   * Redo last undone action
-   */
   redo: () => {
     const { fabricCanvas } = get()
     if (!fabricCanvas) return

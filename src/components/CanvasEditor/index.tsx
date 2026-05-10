@@ -8,6 +8,7 @@ import { ToastContainer } from '@/components/Toast'
 import { loadFabric } from '@/lib/fabric-loader'
 import { useCanvasStore } from '@/stores/canvas'
 
+import { useAddTextShortcuts } from './hooks/useAddTextShortcuts'
 import { useCanvasEvents } from './hooks/useCanvasEvents'
 import { useCopyShortcut } from './hooks/useCopyShortcut'
 import { useKeyboardNav } from './hooks/useKeyboardNav'
@@ -58,6 +59,7 @@ export function CanvasEditor({ className }: CanvasEditorProps) {
   useCopyShortcut()
   useKeyboardNav()
   useUndoRedoShortcuts()
+  useAddTextShortcuts()
 
   useEffect(() => {
     if (!canvasRef.current) return
@@ -126,7 +128,7 @@ export function CanvasEditor({ className }: CanvasEditorProps) {
         />
       </div>
 
-      <div className="relative">
+      <div className="relative inline-block">
         {state.isLoading && (
           <div className="bg-opacity-50 absolute inset-0 flex items-center justify-center bg-white">
             <div className="size-8 animate-spin rounded-full border-2 border-zinc-300 border-t-blue-600" />
@@ -136,10 +138,10 @@ export function CanvasEditor({ className }: CanvasEditorProps) {
           ref={canvasRef}
           role="application"
           aria-label="Image editor canvas"
-          className="w-full lg:w-full"
+          className="block h-auto w-full max-w-93.75"
         />
 
-        <SafeZoneOverlay />
+        <SafeZoneOverlay className="pointer-events-none absolute inset-0" />
       </div>
 
       <ExportToolbar />

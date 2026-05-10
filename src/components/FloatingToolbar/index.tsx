@@ -25,7 +25,9 @@ function isTextObject(obj: unknown): obj is FabricObject & { type: string } {
   return (
     obj !== null &&
     typeof obj === 'object' &&
-    (obj as Record<string, unknown>).type === 'text'
+    ['text', 'textbox', 'i-text'].includes(
+      (obj as Record<string, unknown>).type as string,
+    )
   )
 }
 
@@ -158,6 +160,16 @@ export function FloatingToolbar() {
     }
   }
 
+  const currentColor =
+    ((selectedObject as unknown as Record<string, unknown>).fill as string) ||
+    '#0B1F3A'
+
+  const handleCustomColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!selectedObjectId) return
+    applyColor(selectedObjectId, e.target.value)
+    setSelectedColor(e.target.value)
+  }
+
   return (
     <div
       role="toolbar"
@@ -255,6 +267,22 @@ export function FloatingToolbar() {
           >
             <Italic size={20} />
           </button>
+
+          {/* Custom color input */}
+          <label className="relative flex size-12 cursor-pointer items-center justify-center rounded-lg text-[#0B1F3A] transition-colors hover:bg-white/20">
+            <input
+              type="color"
+              value={currentColor}
+              onChange={handleCustomColorChange}
+              className="absolute inset-0 cursor-pointer opacity-0"
+              aria-label="Custom Text Color"
+              title="Custom Text Color"
+            />
+            <div
+              className="size-6 rounded-full border-2 border-[#0B1F3A]"
+              style={{ backgroundColor: currentColor }}
+            />
+          </label>
         </>
       )}
     </div>
