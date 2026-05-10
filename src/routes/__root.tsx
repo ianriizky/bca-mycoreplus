@@ -20,6 +20,13 @@ function RootComponent() {
           Home
         </Link>
         <Link
+          to="/counter"
+          activeProps={{ className: 'font-bold' }}
+          aria-label="Counter page"
+        >
+          Counter
+        </Link>
+        <Link
           to="/editor"
           activeProps={{ className: 'font-bold' }}
           aria-label="Image editor"
