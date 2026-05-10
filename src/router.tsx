@@ -1,9 +1,10 @@
-import { createRouter, Link } from '@tanstack/react-router'
+import { createRouter, createHashHistory, Link } from '@tanstack/react-router'
 
 import { routeTree } from './routeTree.gen'
 
 export const router = createRouter({
   routeTree,
+  history: createHashHistory(),
   defaultPreload: 'intent',
   defaultStaleTime: 5000,
   scrollRestoration: true,
