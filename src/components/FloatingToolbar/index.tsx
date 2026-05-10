@@ -70,7 +70,7 @@ export function FloatingToolbar() {
 
   const { isVisible } = useToolbarVisibility(selectedObject)
   const position = useToolbarPosition(selectedObject)
-  const { position: dragPosition, handleMouseDown } = useDraggable(position)
+  const { position: dragPosition, handlePointerDown } = useDraggable(position)
 
   useEffect(() => {
     if (!isVisible) return
@@ -232,8 +232,9 @@ export function FloatingToolbar() {
       }}
     >
       <div
-        onMouseDown={handleMouseDown}
+        onPointerDown={handlePointerDown}
         className="flex cursor-move items-center justify-center rounded-lg hover:bg-white/20"
+        style={{ touchAction: 'none', userSelect: 'none' }}
         aria-label="Drag to move toolbar"
         title="Drag to move"
       >

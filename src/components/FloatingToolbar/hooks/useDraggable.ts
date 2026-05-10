@@ -4,6 +4,7 @@ interface DraggableState {
   isDragging: boolean
   offset: { x: number; y: number }
   position: { x: number; y: number }
+  pointerId: number | null
 }
 
 export function useDraggable(initialPosition: { x: number; y: number }) {
@@ -11,6 +12,7 @@ export function useDraggable(initialPosition: { x: number; y: number }) {
     isDragging: false,
     offset: { x: 0, y: 0 },
     position: initialPosition,
+    pointerId: null,
   }))
   const dragHandleRef = useRef<HTMLDivElement>(null)
   const prevInitialRef = useRef(initialPosition)
@@ -28,17 +30,28 @@ export function useDraggable(initialPosition: { x: number; y: number }) {
     }
   }, [initialPosition, initialPosition.x, initialPosition.y])
 
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (e.button !== 0) return
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
+    // Only handle primary pointer (first touch/mouse)
+    if (!e.isPrimary) return
+    // Only handle left mouse button
+    if (e.pointerType === 'mouse' && e.button !== 0) return
 
     const rect = (e.currentTarget as HTMLElement)
       .closest('[data-draggable]')
       ?.getBoundingClientRect()
     if (!rect) return
 
+    // Capture pointer to receive all events even if pointer moves outside element
+    try {
+      ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+    } catch {
+      return
+    }
+
     setState((prev) => ({
       ...prev,
       isDragging: true,
+      pointerId: e.pointerId,
       offset: {
         x: e.clientX - rect.left,
         y: e.clientY - rect.top,
@@ -49,9 +62,12 @@ export function useDraggable(initialPosition: { x: number; y: number }) {
   }, [])
 
   useEffect(() => {
-    if (!state.isDragging) return
+    if (!state.isDragging || state.pointerId === null) return
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handlePointerMove = (e: PointerEvent) => {
+      // Only handle the pointer that started the drag
+      if (e.pointerId !== state.pointerId) return
+
       setState((prev) => ({
         ...prev,
         position: {
@@ -59,28 +75,47 @@ export function useDraggable(initialPosition: { x: number; y: number }) {
           y: e.clientY - prev.offset.y,
         },
       }))
+
+      e.preventDefault()
     }
 
-    const handleMouseUp = () => {
+    const handlePointerUp = (e: PointerEvent) => {
+      // Only handle the pointer that started the drag
+      if (e.pointerId !== state.pointerId) return
+
       setState((prev) => ({
         ...prev,
         isDragging: false,
+        pointerId: null,
       }))
     }
 
-    document.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('mouseup', handleMouseUp)
+    const handlePointerCancel = (e: PointerEvent) => {
+      // Handle system interruptions (e.g., modal, alert)
+      if (e.pointerId !== state.pointerId) return
+
+      setState((prev) => ({
+        ...prev,
+        isDragging: false,
+        pointerId: null,
+      }))
+    }
+
+    document.addEventListener('pointermove', handlePointerMove)
+    document.addEventListener('pointerup', handlePointerUp)
+    document.addEventListener('pointercancel', handlePointerCancel)
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
+      document.removeEventListener('pointermove', handlePointerMove)
+      document.removeEventListener('pointerup', handlePointerUp)
+      document.removeEventListener('pointercancel', handlePointerCancel)
     }
-  }, [state.isDragging])
+  }, [state.isDragging, state.pointerId])
 
   return {
     position: state.position,
     isDragging: state.isDragging,
     dragHandleRef,
-    handleMouseDown,
+    handlePointerDown,
   }
 }
