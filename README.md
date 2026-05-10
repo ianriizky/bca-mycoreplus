@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
 [![Release](https://badgen.net/github/release/ianriizky/bca-mycoreplus 'Release')](https://github.com/ianriizky/bca-mycoreplus/releases)
-[![Pipeline Status](https://github.com/ianriizky/bca-mycoreplus/actions/workflows/ci-cd.yml/badge.svg 'Pipeline Status')](https://github.com/ianriizky/bca-mycoreplus/actions/workflows/ci-cd.yml)
+[![Pipeline Status](https://github.com/ianriizky/bca-mycoreplus/actions/workflows/ci.yml/badge.svg 'Pipeline Status')](https://github.com/ianriizky/bca-mycoreplus/actions/workflows/ci.yml)
 [![Codecov Coverage](https://codecov.io/github/ianriizky/bca-mycoreplus/graph/badge.svg?token=KI8KPL8FX9)](https://codecov.io/github/ianriizky/bca-mycoreplus)
 
 ## Table of contents
