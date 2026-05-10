@@ -7,6 +7,7 @@ export const router = createRouter({
   defaultPreload: 'intent',
   defaultStaleTime: 5000,
   scrollRestoration: true,
+  basepath: import.meta.env.VITE_BASE_PATH || '/',
   defaultNotFoundComponent: () => (
     <div>
       <p>Not found!</p>
