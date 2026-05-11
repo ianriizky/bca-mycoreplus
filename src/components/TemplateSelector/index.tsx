@@ -127,7 +127,6 @@ export function TemplateSelector() {
       >
         <LayoutTemplate size={18} aria-hidden="true" />
         <span className="hidden sm:inline">Select Template</span>
-        <span className="sm:hidden">Template</span>
       </button>
 
       {state.isOpen && (
