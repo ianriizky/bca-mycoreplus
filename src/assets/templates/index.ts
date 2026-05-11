@@ -1,7 +1,9 @@
 import { birthdayGreetingTemplate } from './birthday-greeting'
+import { birthdayGreetingPremiumTemplate } from './birthday-greeting-premium'
 
 export const TEMPLATES = {
   'birthday-greeting-001': birthdayGreetingTemplate,
+  'birthday-greeting-002': birthdayGreetingPremiumTemplate,
 }
 
 export const getTemplate = (templateId: string) => {

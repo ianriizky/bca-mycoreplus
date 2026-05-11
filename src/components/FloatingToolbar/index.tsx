@@ -27,7 +27,7 @@ import { ScaleControl } from './ScaleControl'
 import { TextAlignmentButtons } from './TextAlignmentButtons'
 import { TextSpacingControls } from './TextSpacingControls'
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 
 function isTextObject(obj: unknown): obj is FabricObject & { type: string } {
   return (

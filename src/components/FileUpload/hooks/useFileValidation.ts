@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import type { ValidationResult } from '../types'
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024
+const MAX_FILE_SIZE = 10 * 1024 * 1024
 const ALLOWED_FORMATS = [
   'image/png',
   'image/jpeg',
@@ -15,7 +15,7 @@ export function useFileValidation() {
     if (file.size > MAX_FILE_SIZE) {
       return {
         valid: false,
-        error: 'File terlalu besar (max 5MB). Pilih file lain?',
+        error: 'File terlalu besar (max 10MB). Pilih file lain?',
       }
     }
 

@@ -177,14 +177,14 @@ export function FileUpload({
         <button
           onClick={() => fileInputRef.current?.click()}
           className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-          aria-label="Upload image (PNG, JPG, SVG, WebP - max 5MB)"
+          aria-label="Upload image (PNG, JPG, SVG, WebP - max 10MB)"
         >
           <Upload size={18} aria-hidden="true" />
           <span className="hidden sm:inline">Upload Image</span>
         </button>
 
         <div id="file-upload-help" className="sr-only">
-          Supported formats: PNG, JPG, SVG, WebP. Maximum file size: 5MB.
+          Supported formats: PNG, JPG, SVG, WebP. Maximum file size: 10MB.
         </div>
       </div>
 

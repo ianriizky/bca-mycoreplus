@@ -13,7 +13,7 @@ so that I can ensure files are within acceptable limits and prevent browser cras
 ## User Story Statement
 
 **As a:** BCA Staff (Relationship Manager, Customer Service)
-**I want:** To upload images with automatic validation that files exceed 5MB are rejected
+**I want:** To upload images with automatic validation that files exceed 10MB are rejected
 **So that:** I can maintain application performance and avoid browser crashes from oversized files
 
 ---
@@ -23,8 +23,8 @@ so that I can ensure files are within acceptable limits and prevent browser cras
 ### AC1: File Size Validation
 
 - [x] Upload button opens native file picker
-- [x] Files larger than 5MB are rejected with error message
-- [x] Error message: "File terlalu besar (max 5MB). Pilih file lain?"
+- [x] Files larger than 10MB are rejected with error message
+- [x] Error message: "File terlalu besar (max 10MB). Pilih file lain?"
 - [x] User can select another file after rejection
 - [x] File size check happens BEFORE file processing
 
@@ -78,13 +78,13 @@ so that I can ensure files are within acceptable limits and prevent browser cras
 
 - [x] Create `src/components/FileUpload/index.tsx`
 - [x] Set up file input with `accept="image/*"`
-- [x] Implement file size validation (5MB limit)
+- [x] Implement file size validation (10MB limit)
 - [x] Implement file format validation (PNG, JPG, SVG, WebP)
 - [x] AC: #1, #2, #6
 
 ### Task 2: Implement File Size Validation
 
-- [x] Check `file.size > 5MB * 1024 * 1024`
+- [x] Check `file.size > 10MB * 1024 * 1024`
 - [x] Show error modal on size violation
 - [x] Provide "Choose Another" button (reopens file picker)
 - [x] Provide "Cancel" button (closes modal)
@@ -165,11 +165,11 @@ reader.readAsDataURL(file) // Read as Base64
 **File Size Validation:**
 
 ```typescript
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB in bytes
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB in bytes
 
 function validateFileSize(file: File): boolean {
   if (file.size > MAX_FILE_SIZE) {
-    showError('File terlalu besar (max 5MB). Pilih file lain?')
+    showError('File terlalu besar (max 10MB). Pilih file lain?')
     return false
   }
   return true
@@ -267,7 +267,7 @@ src/components/FileUpload/
 
 | Requirement           | Detail                        | Source              |
 | --------------------- | ----------------------------- | ------------------- |
-| **Max File Size**     | 5MB                           | UX Design, PRD FR35 |
+| **Max File Size**     | 10MB                          | UX Design, PRD FR35 |
 | **Supported Formats** | PNG, JPG, SVG, WebP           | UX Design           |
 | **Validation**        | Synchronous, instant feedback | NFR6                |
 | **Image Resize**      | 25-50% for preview            | NFR4 (memory)       |
@@ -333,7 +333,7 @@ Cascade AI (Claude 3.5 Sonnet)
 ### Completion Notes List
 
 1. **Component Structure**: Created modular FileUpload component with separate validation hook
-2. **Validation Logic**: Implemented synchronous file size (5MB) and format (PNG/JPG/SVG/WebP) validation
+2. **Validation Logic**: Implemented synchronous file size (10MB) and format (PNG/JPG/SVG/WebP) validation
 3. **UI/UX**: Built modal-based preview and error handling with Indonesian error messages
 4. **Accessibility**: Added aria-label, role="alert", and aria-live attributes for screen readers
 5. **Integration**: Connected FileUpload to CanvasEditor with proper callback handling

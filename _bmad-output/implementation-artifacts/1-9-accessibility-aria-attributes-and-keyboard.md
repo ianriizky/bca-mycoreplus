@@ -136,7 +136,7 @@ export function FileUpload() {
   return (
     <div>
       <label htmlFor={inputId}>
-        Upload image (PNG, JPG, SVG, WebP - max 5MB)
+        Upload image (PNG, JPG, SVG, WebP - max 10MB)
       </label>
       <input
         id={inputId}
@@ -146,7 +146,7 @@ export function FileUpload() {
         aria-describedby="file-help"
       />
       <div id="file-help" className="text-sm text-gray-600">
-        Supported formats: PNG, JPG, SVG, WebP. Maximum file size: 5MB.
+        Supported formats: PNG, JPG, SVG, WebP. Maximum file size: 10MB.
       </div>
     </div>
   )
@@ -530,7 +530,7 @@ None required. All functionality uses native browser APIs and React built-ins.
 **Error:**
 
 ```
-"❌ Upload failed. File too large (max 5MB). Please try again."
+"❌ Upload failed. File too large (max 10MB). Please try again."
 ```
 
 **Info:**

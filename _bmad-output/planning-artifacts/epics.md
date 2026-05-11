@@ -231,6 +231,27 @@ so that I can quickly create professional birthday greeting images without desig
 9. AC9: Keyboard navigation support (Tab, Enter, ESC keys)
 10. AC10: ARIA labels and accessibility attributes for screen reader support
 
+##### Story 2-7: Insert WhatsApp Message into Canvas (Priority: High)
+
+As a BCA staff member,
+I want to insert the WhatsApp message I've edited directly into the canvas as a text object,
+so that I can quickly add pre-written messages to images without retyping.
+
+**Acceptance Criteria:**
+
+1. AC1: "Insert WhatsApp Message into Canvas" button visible in edit message panel next to "Save" button with `id="btn-insert-whatsapp-message"`
+2. AC2: Button is disabled when WhatsApp message is empty or only whitespace
+3. AC3: Confirmation dialog appears before inserting with message preview
+4. AC4: Text object created on canvas with default styling (fontSize: 48, fill: #0B1F3A, center alignment)
+5. AC5: Multiple text objects can be inserted from different message edits
+6. AC6: Dialog closes after insert, edit panel remains open for further edits
+7. AC7: Emoji in WhatsApp message are displayed correctly in canvas text object
+8. AC8: Line breaks in WhatsApp message are preserved in canvas text object
+9. AC9: Error handling with user-friendly alert if insertion fails
+10. AC10: ARIA labels and accessibility attributes for screen reader support
+11. AC11: Keyboard navigation support (Tab, Enter, ESC keys) in confirmation dialog
+12. AC12: Visual feedback (loading state) shown during text object creation
+
 #### Gap Sources (from Epic 1 Retrospective)
 
 - **WhatsApp message hardcoded** - Story 1-6 AC2 stated "customizable" but no UI implemented

@@ -309,7 +309,7 @@ border-radius: 12px;
 
 1. **Keyboard Event Listener Cleanup** - Moved `isVisible` check before `addEventListener` to prevent listener accumulation and ensure proper cleanup
 2. **Color Picker UX** - Replaced `prompt()` with HTML5 `<input type="color">` for better user experience
-3. **File Size Validation** - Added 5MB file size limit with proper error handling for FileReader
+3. **File Size Validation** - Added 10MB file size limit with proper error handling for FileReader
 4. **Position Clamping Logic** - Improved fallback positioning algorithm to prevent toolbar overlap with content
 5. **Type Safety** - Created `isTextObject()` type guard function to replace unsafe type casts
 6. **Edge-Case Tests** - Added 4 new tests for keyboard navigation, file validation, font size bounds, and color picker
@@ -353,7 +353,7 @@ Claude (Cascade)
 - Context-sensitive actions (text vs image objects) functioning properly
 - Accessibility attributes (role, aria-label, aria-hidden) properly implemented
 - HTML5 color picker integrated successfully
-- File size validation (5MB limit) enforced
+- File size validation (10MB limit) enforced
 - Position clamping prevents toolbar overlap in edge cases
 - Type guard function improves type safety
 

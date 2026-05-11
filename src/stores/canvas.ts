@@ -44,6 +44,13 @@ interface CanvasStore {
     type: 'text' | 'image',
     props?: Record<string, unknown>,
   ) => Promise<string>
+  addTextObject: (options: {
+    content: string
+    fontSize?: number
+    fontFamily?: string
+    fill?: string
+    textAlign?: 'left' | 'center' | 'right'
+  }) => Promise<string>
   updateObject: (id: string, props: Record<string, unknown>) => void
   deleteObject: (id: string) => void
   selectObject: (id: string | null) => void
@@ -198,6 +205,50 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     return id
   },
 
+  addTextObject: async (options: {
+    content: string
+    fontSize?: number
+    fontFamily?: string
+    fill?: string
+    textAlign?: 'left' | 'center' | 'right'
+  }): Promise<string> => {
+    const { fabricCanvas } = get()
+    if (!fabricCanvas) {
+      throw new Error('Canvas not initialized')
+    }
+
+    const id = `obj_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`
+    const { Text } = await import('fabric')
+
+    const textObj = new Text(options.content, {
+      left: fabricCanvas.width! / 2,
+      top: fabricCanvas.height! / 2,
+      fontSize: options.fontSize ?? 48,
+      fontFamily: options.fontFamily ?? 'Arial',
+      fill: options.fill ?? '#0B1F3A',
+      textAlign: options.textAlign ?? 'center',
+      lineHeight: 1.2,
+      originX: 'center',
+      originY: 'center',
+      editable: true,
+    })
+    ;(textObj as unknown as { id: string }).id = id
+
+    fabricCanvas.add(textObj)
+    fabricCanvas.setActiveObject(textObj)
+    fabricCanvas.requestRenderAll()
+
+    const serialized = fabricCanvas.toJSON()
+    set((state) => ({
+      objects: [...state.objects, serialized as unknown as SerializedObject],
+    }))
+
+    const historyStore = useHistoryStore.getState()
+    historyStore.pushHistory(serializeCanvasState(fabricCanvas))
+
+    return id
+  },
+
   updateObject: (id: string, props: Record<string, unknown>) => {
     const { fabricCanvas, objects } = get()
     if (!fabricCanvas) return
@@ -342,12 +393,12 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
             template.backgroundImage,
             { crossOrigin: 'anonymous' },
           )
+          const bgId = `obj_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`
           bgImg.set({
             left: 0,
             top: 0,
-            selectable: false,
-            evented: false,
           })
+          ;(bgImg as unknown as { id: string }).id = bgId
           fabricCanvas.add(bgImg)
           fabricCanvas.sendObjectToBack(bgImg)
         } catch (err) {

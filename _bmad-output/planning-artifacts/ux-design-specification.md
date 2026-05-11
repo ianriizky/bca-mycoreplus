@@ -42,7 +42,7 @@ This UX Design Specification documents the complete user experience design for B
 
 ### Upload & File Constraints
 
-- **Max file size**: 5MB per upload
+- **Max file size**: 10MB per upload
 - **Supported formats**: PNG, JPG, SVG, WebP (all formats accepted)
 - **Dimensions**: Free aspect ratio and dimensions (no crop tool, no aspect ratio selector)
 - **Color extraction**: ColorThief.js v3+ for automatic palette extraction from uploaded images
@@ -84,7 +84,7 @@ BCA MyCore+ Home
     ↓
 [Choose Entry Point]
     ├─→ Entry Point 1: Upload Template
-    │   └─→ File picker → Select PNG/JPG/SVG/WebP (max 5MB)
+    │   └─→ File picker → Select PNG/JPG/SVG/WebP (max 10MB)
     │       └─→ Preview → Confirm → Canvas Editor
     │
     ├─→ Entry Point 2: Choose from Library
@@ -203,7 +203,7 @@ Step 6: Export & Share
 │  ┌─────────────────────────────┐│
 │  │ 📤 Upload Template          ││
 │  │ Pilih file PNG/JPG/SVG/WebP ││
-│  │ (max 5MB)                   ││
+│  │ (max 10MB)                  ││
 │  └─────────────────────────────┘│
 │                                 │
 │  ┌─────────────────────────────┐│
@@ -336,7 +336,7 @@ Step 6: Export & Share
 ### Interaction 4: Photo Upload
 
 - **Tap "Upload Photo" button**: File picker opens
-- **Select file**: PNG/JPG/SVG/WebP (max 5MB)
+- **Select file**: PNG/JPG/SVG/WebP (max 10MB)
 - **Preview**: Image appears in file picker
 - **Confirm**: Drag to canvas or auto-place
 - **ColorThief extracts palette**: 5 colors (Vibrant, Muted, DarkVibrant, etc.)
@@ -370,7 +370,7 @@ Step 6: Export & Share
 ### Error Handling
 
 - **Invalid file format**: Toast notification "Format tidak didukung. Gunakan PNG/JPG/SVG/WebP"
-- **File too large (> 5MB)**: Error modal "File terlalu besar (max 5MB). Pilih file lain?"
+- **File too large (> 10MB)**: Error modal "File terlalu besar (max 10MB). Pilih file lain?"
 - **Upload failed**: Error modal "Upload gagal. Coba lagi?" with Retry button
 - **Network error**: Toast notification "Koneksi terputus. Periksa internet Anda." (auto-dismiss 5s)
 - **Clipboard API not supported**: Fallback to download link
@@ -697,7 +697,7 @@ App
 
 ### Error State 2: File Too Large
 
-**Trigger**: File size > 5MB
+**Trigger**: File size > 10MB
 
 **UI**:
 
@@ -706,7 +706,7 @@ App
 │ ⚠️ File Terlalu Besar           │
 ├─────────────────────────────────┤
 │                                 │
-│ File terlalu besar (max 5MB).   │
+│ File terlalu besar (max 10MB).  │
 │ Pilih file lain?                │
 │                                 │
 │ ┌─────────────────────────────┐│
@@ -795,7 +795,7 @@ App
 │  ┌───────────────────────────────────┐  │
 │  │ 📤 Upload Template                │  │
 │  │ Pilih file PNG/JPG/SVG/WebP       │  │
-│  │ (max 5MB)                         │  │
+│  │ (max 10MB)                        │  │
 │  │                                   │  │
 │  │ Touch Target: 48×48dp minimum     │  │
 │  └───────────────────────────────────┘  │
@@ -1103,7 +1103,7 @@ Glassmorphism: All buttons with backdrop-blur
 
 **Select File**
 
-- Trigger: User selects PNG/JPG/SVG/WebP file (max 5MB)
+- Trigger: User selects PNG/JPG/SVG/WebP file (max 10MB)
 - Action: File preview shown in picker
 - Feedback: File name, size, preview thumbnail
 - State: File Picker → File Selected
@@ -1262,10 +1262,10 @@ Glassmorphism: All buttons with backdrop-blur
 - Recovery: User can retry with valid format
 - Undo/Redo: N/A
 
-**File Too Large (> 5MB)**
+**File Too Large (> 10MB)**
 
-- Trigger: User uploads file > 5MB
-- UI: Error modal "File terlalu besar (max 5MB). Pilih file lain?"
+- Trigger: User uploads file > 10MB
+- UI: Error modal "File terlalu besar (max 10MB). Pilih file lain?"
 - Buttons: "Choose Another" (file picker), "Cancel" (return to canvas)
 - Recovery: User selects smaller file
 - Undo/Redo: N/A
@@ -2009,7 +2009,7 @@ Spacing: 16px margins, 8px button gap
 
 ### Error State 2: File Too Large
 
-**Trigger**: File size > 5MB
+**Trigger**: File size > 10MB
 
 **UI Wireframe**:
 
@@ -2018,11 +2018,11 @@ Spacing: 16px margins, 8px button gap
 │ ⚠️ File Terlalu Besar                   │
 ├─────────────────────────────────────────┤
 │                                         │
-│ File terlalu besar (max 5MB).           │
+│ File terlalu besar (max 10MB).          │
 │ Pilih file lain?                        │
 │                                         │
 │ File size: 12.5 MB                      │
-│ Max allowed: 5 MB                       │
+│ Max allowed: 10 MB                      │
 │                                         │
 │ ┌───────────────────────────────────┐  │
 │ │ 📁 Pilih File Lain                │  │
@@ -2189,7 +2189,7 @@ Buttons: Download + WhatsApp (manual workflow)
 
 ✓ **Table of Contents**: Present with links to all sections
 ✓ **Executive Summary**: 2-3 paragraphs overview
-✓ **UX Constraints Summary**: Mobile-first, touch, 5MB, PNG, WhatsApp
+✓ **UX Constraints Summary**: Mobile-first, touch, 10MB, PNG, WhatsApp
 ✓ **Information Architecture**: 3 entry points, decision tree, navigation flows
 ✓ **User Flow**: Happy path (6 steps), alternative paths, decision points
 ✓ **Wireframes**: 4 screens (Entry Point, Canvas Editor, Floating Toolbar, Export/Share)
@@ -2207,7 +2207,7 @@ Buttons: Download + WhatsApp (manual workflow)
 - ✓ Mobile-first wireframes (touch-optimized, gesture controls)
 - ✓ 3 entry points (Upload/Library/Blank)
 - ✓ Touch interaction patterns (tap, long-press, pinch, drag)
-- ✓ Photo upload UI (5MB max, all formats, free dimensions)
+- ✓ Photo upload UI (10MB max, all formats, free dimensions)
 - ✓ Export/Share UI (PNG + WhatsApp/Email)
 - ✓ Undo/redo UI (5-10 actions)
 - ✓ Glassmorphism styling (brand colors, editable)

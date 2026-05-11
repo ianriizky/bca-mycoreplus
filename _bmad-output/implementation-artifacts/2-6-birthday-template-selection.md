@@ -436,15 +436,15 @@ Story ini telah diimplementasikan dengan lengkap. Semua Acceptance Criteria tela
 - ✅ AC5: Template JSON structure valid dan parseable
 - ✅ AC6: Fabric.js objects created dan manipulable dari template
 - ✅ AC7: Template assets stored di `src/assets/templates/`
-- ✅ AC8: Error handling untuk template load/apply failures
-- ✅ AC9: Keyboard navigation (Tab, Enter, ESC) berfungsi
-- ✅ AC10: ARIA labels present untuk semua interactive elements
 
 ### Additional Features Implemented:
 
-- ✨ **Template Details Preview**: Confirmation modal menampilkan detail lengkap template (nama, deskripsi, background, objects count, WhatsApp message)
-- ✨ **WhatsApp Message Integration**: Ketika template di-apply, WhatsApp message dari template otomatis ter-set di preferences store untuk digunakan di "Edit Message"
-- ✨ **Separated Type Definitions**: Template types dipindahkan ke file terpisah (`types.ts`) untuk better code organization
+- **Template Details Preview**: Confirmation modal menampilkan detail lengkap template (nama, deskripsi, background, objects count, WhatsApp message)
+- **WhatsApp Message Integration**: Ketika template di-apply, WhatsApp message dari template otomatis ter-set di preferences store untuk digunakan di "Edit Message"
+- **Separated Type Definitions**: Template types dipindahkan ke file terpisah (`types.ts`) untuk better code organization
+- **Multiple Templates Support**: Template registry mendukung multiple templates, saat ini tersedia 2 templates:
+  - `birthday-greeting-001`: Birthday Greeting (template standar)
+  - `birthday-greeting-002`: Premium Birthday Greeting (template formal untuk valued customers)
 
 ### Test Results:
 

@@ -83,11 +83,12 @@ describe('TemplateSelector Component', () => {
       fireEvent.click(button)
 
       await waitFor(() => {
-        const applyButton = screen.getByRole('button', {
+        const applyButtons = screen.getAllByRole('button', {
           name: /Apply/i,
         })
-        expect(applyButton).toBeVisible()
-        expect(applyButton).toHaveAttribute(
+        expect(applyButtons.length).toBeGreaterThan(0)
+        expect(applyButtons[0]).toBeVisible()
+        expect(applyButtons[0]).toHaveAttribute(
           'id',
           expect.stringMatching(/btn-apply-template-/),
         )
