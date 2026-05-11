@@ -51,6 +51,7 @@ interface CanvasStore {
   initClipboardSupport: () => Promise<void>
   undo: () => void
   redo: () => void
+  applyTemplate: (templateId: string) => Promise<void>
 }
 
 function getObjectById(canvas: Canvas, id: string): FabricObject | undefined {
@@ -307,6 +308,101 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
 
     if (nextState) {
       deserializeCanvasState(fabricCanvas, nextState)
+    }
+  },
+
+  applyTemplate: async (templateId: string) => {
+    const { fabricCanvas } = get()
+    if (!fabricCanvas) {
+      throw new Error('Canvas not initialized')
+    }
+
+    try {
+      const { getTemplate } = await import('@/assets/templates')
+      const template = getTemplate(templateId)
+
+      if (!template) {
+        throw new Error(`Template ${templateId} not found`)
+      }
+
+      const { usePreferencesStore } = await import('@/stores/preferences')
+      const setWhatsappMessage =
+        usePreferencesStore.getState().setWhatsappMessage
+      setWhatsappMessage(template.whatsappMessage)
+
+      fabricCanvas.clear()
+      fabricCanvas.backgroundColor = '#FFFFFF'
+
+      const { FabricImage: ImportedFabricImage, Textbox } =
+        await import('fabric')
+
+      if (template.backgroundImage) {
+        try {
+          const bgImg = await ImportedFabricImage.fromURL(
+            template.backgroundImage,
+            { crossOrigin: 'anonymous' },
+          )
+          bgImg.set({
+            left: 0,
+            top: 0,
+            selectable: false,
+            evented: false,
+          })
+          fabricCanvas.add(bgImg)
+          fabricCanvas.sendObjectToBack(bgImg)
+        } catch (err) {
+          console.warn('Failed to load template background image:', err)
+        }
+      }
+
+      for (const obj of template.objects) {
+        const id = `obj_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`
+
+        if (obj.type === 'text') {
+          const textObj = new Textbox(obj.content || '', {
+            left: obj.left,
+            top: obj.top,
+            fontSize: obj.fontSize || 48,
+            fontFamily: obj.fontFamily || 'Arial',
+            fill: obj.fill || '#0B1F3A',
+            textAlign: (obj.textAlign as 'left' | 'center' | 'right') || 'left',
+            width: obj.width,
+            lineHeight: 1.2,
+          })
+          ;(textObj as unknown as { id: string }).id = id
+          fabricCanvas.add(textObj)
+        } else if (obj.type === 'image' && obj.src) {
+          try {
+            const imgObj = await ImportedFabricImage.fromURL(obj.src, {
+              crossOrigin: 'anonymous',
+            })
+            imgObj.set({
+              left: obj.left,
+              top: obj.top,
+              width: obj.width,
+              height: obj.height,
+            })
+            ;(imgObj as unknown as { id: string }).id = id
+            fabricCanvas.add(imgObj)
+          } catch (err) {
+            console.warn('Failed to load template image object:', err)
+          }
+        }
+      }
+
+      fabricCanvas.requestRenderAll()
+
+      const serialized = fabricCanvas.toJSON()
+      set({
+        objects: [serialized as unknown as SerializedObject],
+        selectedObjectId: null,
+      })
+
+      const historyStore = useHistoryStore.getState()
+      historyStore.pushHistory(serializeCanvasState(fabricCanvas))
+    } catch (err) {
+      console.error('Failed to apply template:', err)
+      throw err
     }
   },
 }))

@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-05-10T00:00:00.000Z
-last_updated: 2026-05-10T13:35:19.280Z
+last_updated: 2026-05-11T14:25:00.000Z
 project: bca-mycoreplus
 project_key: NOKEY
 tracking_system: file-system
@@ -64,4 +64,5 @@ development_status:
   2-3-image-positioning-controls: review
   2-4-enhanced-text-editing-features: review
   2-5-story-spec-process-improvement: ready-for-dev
+  2-6-birthday-template-selection: done
   epic-2-retrospective: optional

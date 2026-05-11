@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="thumbGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" fill="url(#thumbGradient)"/>
+  <circle cx="50" cy="40" r="15" fill="#FF6B6B" opacity="0.7"/>
+  <circle cx="150" cy="60" r="12" fill="#4ECDC4" opacity="0.7"/>
+  <circle cx="40" cy="160" r="18" fill="#95E1D3" opacity="0.6"/>
+  <circle cx="160" cy="150" r="14" fill="#F38181" opacity="0.6"/>
+  <text x="100" y="110" font-size="16" font-weight="bold" text-anchor="middle" fill="#0B1F3A" font-family="Arial">Birthday</text>
+</svg>

@@ -212,6 +212,25 @@ so that we can ensure all AC are fully implemented before "done".
 2. AC2: Story specs include wireframe/mockup reference
 3. AC3: QA demo checklist before story marked "done"
 
+##### Story 2-6: Birthday Template Selection & Application (Priority: High)
+
+As a BCA staff member,
+I want to select a pre-made birthday greeting template and apply it to the canvas,
+so that I can quickly create professional birthday greeting images without designing from scratch.
+
+**Acceptance Criteria:**
+
+1. AC1: "Select Template" button visible in toolbar with `id="btn-select-template"` and `aria-label="Pilih Template Ucapan Selamat"`
+2. AC2: Modal dialog displays template grid with cards showing thumbnail, name, and "Apply" button
+3. AC3: Confirmation alert appears before applying template to warn about overwriting current canvas
+4. AC4: Canvas updates with template background image and pre-placed text objects after confirmation
+5. AC5: Template data stored as JSON with Fabric.js object definitions (serializable)
+6. AC6: Template objects converted to Fabric.js objects and remain editable after apply
+7. AC7: Template assets stored in `src/assets/templates/` as importable JavaScript files
+8. AC8: Error handling with user-friendly alert if template load/apply fails
+9. AC9: Keyboard navigation support (Tab, Enter, ESC keys)
+10. AC10: ARIA labels and accessibility attributes for screen reader support
+
 #### Gap Sources (from Epic 1 Retrospective)
 
 - **WhatsApp message hardcoded** - Story 1-6 AC2 stated "customizable" but no UI implemented

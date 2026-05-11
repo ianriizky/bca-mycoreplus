@@ -5,6 +5,7 @@ import { AddTextButton } from '@/components/ExportToolbar/AddTextButton'
 import { FileUpload } from '@/components/FileUpload'
 import { FloatingToolbar } from '@/components/FloatingToolbar'
 import { SafeZoneOverlay } from '@/components/SafeZoneOverlay'
+import { TemplateSelector } from '@/components/TemplateSelector'
 import { ToastContainer } from '@/components/Toast'
 import { UndoRedoButtons } from '@/components/UndoRedoButtons'
 import { loadFabric } from '@/lib/fabric-loader'
@@ -126,6 +127,7 @@ export function CanvasEditor({ className }: CanvasEditorProps) {
       <div className="mb-4 flex flex-wrap gap-2 sm:gap-3">
         <UndoRedoButtons />
         <AddTextButton />
+        <TemplateSelector />
         <FileUpload
           onFileSelected={handleFileSelected}
           onError={handleFileError}
