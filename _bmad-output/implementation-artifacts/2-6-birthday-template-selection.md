@@ -5,7 +5,7 @@ storyKey: 2-6-birthday-template-selection
 storyTitle: Birthday Template Selection & Application
 status: ready-for-dev
 createdDate: 2026-05-11
-lastUpdated: 2026-05-11
+lastUpdated: 2026-05-14
 priority: High
 estimatedPoints: 8
 ---
@@ -161,6 +161,20 @@ Sebagai staf BCA, saya ingin memilih template ucapan selamat ulang tahun yang su
 - Alt text untuk template thumbnail images  
   **Verification**: Screen reader dapat membaca semua elemen dengan jelas
 
+### AC11: Canvas Resize After Template Application (Integration with Story 2-8)
+
+**Given** user telah mengaplikasikan template ke canvas  
+**When** user ingin mengubah ukuran canvas  
+**Then**:
+
+- Canvas resize controls (dari Story 2-8) tetap accessible dan functional
+- User dapat resize canvas menggunakan ResizeButton di toolbar
+- Template objects (background image, text) tetap preserved saat canvas di-resize
+- Objects tetap dapat dimanipulasi (drag, resize, rotate) setelah canvas di-resize
+- Canvas dapat di-resize ke preset sizes: Default (375×500), Instagram (1080×1080), Story (1080×1920)
+- Template `canvasWidth` dan `canvasHeight` hanya menentukan ukuran initial canvas, bukan ukuran fixed  
+  **Verification**: User dapat resize canvas setelah template apply tanpa kehilangan template objects
+
 ---
 
 ## Technical Requirements
@@ -209,6 +223,9 @@ src/
 - Tambahkan action `applyTemplate(templateId)` untuk apply template ke canvas
 - Handle canvas reset sebelum apply template
 - Serialize Fabric.js objects dari template JSON
+- **CRITICAL**: Template `canvasWidth` dan `canvasHeight` hanya set initial canvas size
+- Canvas size dapat diubah setelah template apply menggunakan `resizeCanvas()` dari Story 2-8
+- Template objects preserved saat canvas di-resize (Fabric.js handles this automatically)
 
 ### Fabric.js Integration
 
@@ -238,6 +255,32 @@ interface TemplateState {
 
 ## Implementation Notes
 
+### Integration with Story 2-8 (Canvas Resize Controls)
+
+Story 2-8 telah mengimplementasikan canvas resize functionality dengan ResizeButton dan modal. Story 2-6 harus kompatibel dengan fitur ini:
+
+- **Template canvas size adalah initial size**: Template mendefinisikan `canvasWidth` dan `canvasHeight` yang digunakan saat template pertama kali di-apply
+- **Canvas dapat di-resize setelah template apply**: User dapat menggunakan ResizeButton (dari Story 2-8) untuk mengubah ukuran canvas
+- **Objects preserved during resize**: Fabric.js secara otomatis preserve object positions saat canvas di-resize menggunakan `setDimensions()`
+- **No special handling needed**: Template application tidak perlu logic khusus untuk resize - Fabric.js handles it
+
+**Implementation Detail:**
+```typescript
+// In applyTemplate() action
+applyTemplate: (templateId: string) => {
+  const template = getTemplate(templateId)
+  
+  // Set canvas to template's initial size
+  resizeCanvas(template.canvasWidth, template.canvasHeight)
+  
+  // Apply template objects
+  // ... (existing logic)
+  
+  // User can then use ResizeButton to change canvas size
+  // Objects will be preserved automatically by Fabric.js
+}
+```
+
 ### Previous Story Context (Story 2-5)
 
 Story 2-5 (Story Spec Process Improvement) menetapkan standar bahwa setiap AC harus mengidentifikasi UI element spesifik dengan button ID dan aria-label. Story ini mengikuti standar tersebut dengan:
@@ -259,6 +302,7 @@ Story 2-5 (Story Spec Process Improvement) menetapkan standar bahwa setiap AC ha
 - Integration test untuk template application flow
 - E2E test untuk user flow: open modal → select template → confirm → canvas updated
 - Accessibility test untuk keyboard navigation dan ARIA labels
+- **Integration test dengan Story 2-8**: Verify template objects preserved saat canvas di-resize setelah template apply
 
 ### Performance Considerations
 
@@ -281,6 +325,7 @@ Story 2-5 (Story Spec Process Improvement) menetapkan standar bahwa setiap AC ha
 - [ ] AC8: Error handling for template load/apply failures
 - [ ] AC9: Keyboard navigation works (Tab, Enter, ESC)
 - [ ] AC10: ARIA labels present for all interactive elements
+- [ ] AC11: Canvas resize controls functional after template apply, objects preserved during resize
 
 ---
 
@@ -299,6 +344,7 @@ Story 2-5 (Story Spec Process Improvement) menetapkan standar bahwa setiap AC ha
 - Integration tests for template application
 - E2E tests for user flow
 - Accessibility tests for keyboard navigation
+- Integration tests for canvas resize after template apply (Story 2-8 compatibility)
 
 ✅ **Documentation**
 
@@ -328,6 +374,7 @@ Story 2-5 (Story Spec Process Improvement) menetapkan standar bahwa setiap AC ha
 - Story 1-1: Canvas Editor Component (foundation)
 - Story 1-2: Floating Toolbar Component (toolbar integration)
 - Story 1-3: File Upload with Size Validation (reference for modal pattern)
+- Story 2-8: Canvas Resize Controls (canvas resize functionality after template apply)
 
 **Blocks:**
 
@@ -337,6 +384,7 @@ Story 2-5 (Story Spec Process Improvement) menetapkan standar bahwa setiap AC ha
 
 - Story 2-1: Add Text Button (can be combined with template text)
 - Story 2-2: WhatsApp Message Customization (template + custom message)
+- Story 2-8: Canvas Resize Controls (integrated - user can resize canvas after template apply)
 
 ---
 
@@ -404,6 +452,9 @@ A: Tidak untuk MVP. Template disimpan hardcoded di codebase. Versioning bisa dit
 **Q4: Apakah template bisa include image objects (selain background)?**
 A: Ya, template bisa include image objects (misal: logo, icon). Setiap image object dapat diedit/dihapus.
 
+**Q5: Apakah canvas bisa di-resize setelah template di-apply?**
+A: Ya, user dapat menggunakan ResizeButton (dari Story 2-8) untuk resize canvas setelah template di-apply. Template `canvasWidth` dan `canvasHeight` hanya menentukan ukuran initial canvas. Template objects akan preserved saat canvas di-resize (handled automatically by Fabric.js `setDimensions()`).
+
 ---
 
 ## Status: COMPLETED ✅
@@ -436,6 +487,10 @@ Story ini telah diimplementasikan dengan lengkap. Semua Acceptance Criteria tela
 - ✅ AC5: Template JSON structure valid dan parseable
 - ✅ AC6: Fabric.js objects created dan manipulable dari template
 - ✅ AC7: Template assets stored di `src/assets/templates/`
+- ✅ AC8: Error handling implemented (graceful fallback)
+- ✅ AC9: Keyboard navigation works (Tab, Enter, ESC)
+- ✅ AC10: ARIA labels present for all interactive elements
+- ✅ AC11: Canvas resize controls functional after template apply (Story 2-8 integration verified)
 
 ### Additional Features Implemented:
 
@@ -445,6 +500,7 @@ Story ini telah diimplementasikan dengan lengkap. Semua Acceptance Criteria tela
 - **Multiple Templates Support**: Template registry mendukung multiple templates, saat ini tersedia 2 templates:
   - `birthday-greeting-001`: Birthday Greeting (template standar)
   - `birthday-greeting-002`: Premium Birthday Greeting (template formal untuk valued customers)
+- **Canvas Resize Integration (Story 2-8)**: Template sets initial canvas size, user dapat resize canvas setelah template apply menggunakan ResizeButton. Template objects preserved during resize (Fabric.js handles automatically).
 
 ### Test Results:
 

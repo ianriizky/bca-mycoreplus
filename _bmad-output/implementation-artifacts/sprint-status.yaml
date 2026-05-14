@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-05-10T00:00:00.000Z
-last_updated: 2026-05-11T14:25:00.000Z
+last_updated: 2026-05-14T12:55:34.882Z
 project: bca-mycoreplus
 project_key: NOKEY
 tracking_system: file-system
@@ -65,5 +65,6 @@ development_status:
   2-4-enhanced-text-editing-features: review
   2-5-story-spec-process-improvement: ready-for-dev
   2-6-birthday-template-selection: done
-  2-7-insert-whatsapp-message-to-canvas: in-progress
+  2-7-insert-whatsapp-message-to-canvas: review
+  2-8-canvas-resize-controls: review
   epic-2-retrospective: optional

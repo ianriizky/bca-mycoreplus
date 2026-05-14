@@ -33,6 +33,8 @@ interface CanvasStore {
   isLoading: boolean
   clipboardSupported: boolean
   isExporting: boolean
+  canvasWidth: number
+  canvasHeight: number
   history: {
     past: SerializedObject[][]
     future: SerializedObject[][]
@@ -56,6 +58,7 @@ interface CanvasStore {
   selectObject: (id: string | null) => void
   applyColor: (id: string, color: string) => void
   initClipboardSupport: () => Promise<void>
+  resizeCanvas: (width: number, height: number) => void
   undo: () => void
   redo: () => void
   applyTemplate: (templateId: string) => Promise<void>
@@ -76,21 +79,23 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
   isLoading: false,
   clipboardSupported: false,
   isExporting: false,
+  canvasWidth: 375,
+  canvasHeight: 500,
   history: {
     past: [],
     future: [],
   },
 
   initCanvas: async (el: HTMLCanvasElement) => {
-    const { fabricCanvas } = get()
+    const { fabricCanvas, canvasWidth, canvasHeight } = get()
     if (fabricCanvas) {
       fabricCanvas.dispose()
     }
 
     const { Canvas } = await loadFabric()
     const canvas = new Canvas(el, {
-      width: 375,
-      height: 500,
+      width: canvasWidth,
+      height: canvasHeight,
       backgroundColor: '#FFFFFF',
       selection: true,
       preserveObjectStacking: true,
@@ -338,6 +343,35 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     set({ clipboardSupported: supported })
   },
 
+  resizeCanvas: (width: number, height: number) => {
+    const {
+      fabricCanvas,
+      canvasWidth: oldWidth,
+      canvasHeight: oldHeight,
+    } = get()
+    if (!fabricCanvas) return
+
+    const validWidth = Math.max(200, Math.min(2000, width))
+    const validHeight = Math.max(200, Math.min(2000, height))
+
+    const scaleX = validWidth / oldWidth
+    const scaleY = validHeight / oldHeight
+
+    fabricCanvas.getObjects().forEach((obj) => {
+      obj.scaleX = (obj.scaleX || 1) * scaleX
+      obj.scaleY = (obj.scaleY || 1) * scaleY
+      obj.left = (obj.left || 0) * scaleX
+      obj.top = (obj.top || 0) * scaleY
+      obj.setCoords()
+    })
+
+    fabricCanvas.setDimensions({ width: validWidth, height: validHeight })
+
+    set({ canvasWidth: validWidth, canvasHeight: validHeight })
+
+    fabricCanvas.requestRenderAll()
+  },
+
   undo: () => {
     const { fabricCanvas } = get()
     if (!fabricCanvas) return
@@ -383,6 +417,16 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
 
       fabricCanvas.clear()
       fabricCanvas.backgroundColor = '#FFFFFF'
+
+      // AC11: Set canvas size from template (initial size, user can resize after)
+      fabricCanvas.setDimensions({ 
+        width: template.canvasWidth, 
+        height: template.canvasHeight 
+      })
+      set({ 
+        canvasWidth: template.canvasWidth, 
+        canvasHeight: template.canvasHeight 
+      })
 
       const { FabricImage: ImportedFabricImage, Textbox } =
         await import('fabric')

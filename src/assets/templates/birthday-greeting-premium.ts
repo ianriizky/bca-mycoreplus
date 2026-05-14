@@ -27,8 +27,8 @@ Cheers to your continued success and happiness 🥂`,
       height: 80,
     },
   ],
-  canvasWidth: 375,
-  canvasHeight: 500,
+  canvasWidth: 1044,
+  canvasHeight: 1435,
   whatsappMessage: `Warmest birthday wishes to Bapak / Ibu / Koko / Cece 🎉
 
 May your special day be filled with joy, good health, and continued success. It is truly a pleasure to serve you, and we sincerely appreciate you as one of our most loyal and valued customers.

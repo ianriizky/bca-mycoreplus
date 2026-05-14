@@ -5,17 +5,18 @@ import { AddTextButton } from '@/components/ExportToolbar/AddTextButton'
 import { FileUpload } from '@/components/FileUpload'
 import { FloatingToolbar } from '@/components/FloatingToolbar'
 import { SafeZoneOverlay } from '@/components/SafeZoneOverlay'
-import { TemplateSelector } from '@/components/TemplateSelector'
 import { ToastContainer } from '@/components/Toast'
 import { UndoRedoButtons } from '@/components/UndoRedoButtons'
 import { loadFabric } from '@/lib/fabric-loader'
 import { useCanvasStore } from '@/stores/canvas'
 
+import { TemplateSelector } from '../TemplateSelector'
 import { useAddTextShortcuts } from './hooks/useAddTextShortcuts'
 import { useCanvasEvents } from './hooks/useCanvasEvents'
 import { useCopyShortcut } from './hooks/useCopyShortcut'
 import { useKeyboardNav } from './hooks/useKeyboardNav'
 import { useUndoRedoShortcuts } from './hooks/useUndoRedoShortcuts'
+import { ResizeButton } from './ResizeButton'
 
 interface CanvasEditorProps {
   className?: string
@@ -127,12 +128,13 @@ export function CanvasEditor({ className }: CanvasEditorProps) {
       <div className="mb-4 flex flex-wrap gap-2 sm:gap-3">
         <UndoRedoButtons />
         <AddTextButton />
-        <TemplateSelector />
+        <ResizeButton />
         <FileUpload
           onFileSelected={handleFileSelected}
           onError={handleFileError}
           className="flex shadow-lg backdrop-blur-sm"
         />
+        <TemplateSelector />
       </div>
 
       <div className="relative inline-block">
@@ -145,7 +147,7 @@ export function CanvasEditor({ className }: CanvasEditorProps) {
           ref={canvasRef}
           role="application"
           aria-label="Image editor canvas"
-          className="block h-auto w-full max-w-93.75"
+          className="block h-auto w-full"
         />
 
         <SafeZoneOverlay className="pointer-events-none absolute inset-0" />
