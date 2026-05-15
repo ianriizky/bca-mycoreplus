@@ -419,13 +419,13 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
       fabricCanvas.backgroundColor = '#FFFFFF'
 
       // AC11: Set canvas size from template (initial size, user can resize after)
-      fabricCanvas.setDimensions({ 
-        width: template.canvasWidth, 
-        height: template.canvasHeight 
+      fabricCanvas.setDimensions({
+        width: template.canvasWidth,
+        height: template.canvasHeight,
       })
-      set({ 
-        canvasWidth: template.canvasWidth, 
-        canvasHeight: template.canvasHeight 
+      set({
+        canvasWidth: template.canvasWidth,
+        canvasHeight: template.canvasHeight,
       })
 
       const { FabricImage: ImportedFabricImage, Textbox } =
