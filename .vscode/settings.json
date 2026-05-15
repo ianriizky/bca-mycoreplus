@@ -24,15 +24,18 @@
   },
   "files.eol": "\n",
   "files.readonlyInclude": {
-    "**/routeTree.gen.ts": true
+    "**/routeTree.gen.ts": true,
+    "**/static-assets.ts": true
   },
   "files.watcherExclude": {
-    "**/routeTree.gen.ts": true
+    "**/routeTree.gen.ts": true,
+    "**/static-assets.ts": true
   },
   "js/ts.preferences.importModuleSpecifier": "shortest",
   "npm.packageManager": "bun",
   "js/ts.tsdk.path": "node_modules/typescript/lib",
   "search.exclude": {
-    "**/routeTree.gen.ts": true
+    "**/routeTree.gen.ts": true,
+    "**/static-assets.ts": true
   }
 }

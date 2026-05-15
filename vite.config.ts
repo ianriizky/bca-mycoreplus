@@ -4,6 +4,7 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig } from 'vite'
+import staticAssetsPlugin from 'vite-static-assets-plugin'
 
 /**
  * @see https://vite.dev/config/
@@ -20,6 +21,7 @@ export default defineConfig({
     tailwindcss(),
     react(),
     babel({ presets: [reactCompilerPreset()] }),
+    staticAssetsPlugin(),
   ],
   build: {
     rollupOptions: {

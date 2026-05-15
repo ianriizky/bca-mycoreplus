@@ -1,11 +1,13 @@
+import { staticAssets } from '@/static-assets'
+
 import type { Template } from './types'
 
 export const birthdayGreetingTemplate: Template = {
   id: 'birthday-greeting-001',
   name: 'Birthday Greeting',
   description: 'Template ucapan selamat ulang tahun dengan background dan text',
-  thumbnail: '/templates/birthday-greeting-thumb.svg',
-  backgroundImage: '/templates/birthday-greeting-bg.svg',
+  thumbnail: staticAssets('templates/birthday-greeting-thumb.svg'),
+  backgroundImage: staticAssets('templates/birthday-greeting-bg.svg'),
   objects: [
     {
       type: 'text',

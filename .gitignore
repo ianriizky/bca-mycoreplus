@@ -29,3 +29,6 @@ lerna-debug.log*
 
 # TanStack Router generated route tree
 /src/routeTree.gen.ts
+
+# Static assets
+/src/static-assets.ts

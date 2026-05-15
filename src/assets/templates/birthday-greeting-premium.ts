@@ -1,3 +1,5 @@
+import { staticAssets } from '@/static-assets'
+
 import type { Template } from './types'
 
 export const birthdayGreetingPremiumTemplate: Template = {
@@ -5,8 +7,8 @@ export const birthdayGreetingPremiumTemplate: Template = {
   name: 'Premium Birthday Greeting',
   description:
     'Template ucapan selamat ulang tahun premium dengan pesan formal untuk valued customers',
-  thumbnail: '/templates/birthday-greeting-thumb-02.jpeg',
-  backgroundImage: '/templates/birthday-greeting-bg-02.png',
+  thumbnail: staticAssets('templates/birthday-greeting-thumb-02.jpeg'),
+  backgroundImage: staticAssets('templates/birthday-greeting-bg-02.png'),
   objects: [
     {
       type: 'text',
