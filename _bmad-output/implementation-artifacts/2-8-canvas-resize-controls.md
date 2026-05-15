@@ -543,6 +543,7 @@ Implemented canvas resize functionality following TDD approach:
 ### Completion Notes
 
 **Implemented:**
+
 - Canvas resize controls with width/height inputs and +/- buttons
 - Min/max constraints enforced (200px - 2000px)
 - Preset size buttons: Default (375×500), Instagram (1080×1080), Story (1080×1920)
@@ -554,16 +555,19 @@ Implemented canvas resize functionality following TDD approach:
 - Modal closes automatically when preset button clicked
 
 **Files Modified:**
+
 - src/stores/canvas.ts - Added canvasWidth, canvasHeight state and resizeCanvas() action
 - src/components/CanvasEditor/ResizeButton.tsx - New button + modal component
 - src/components/CanvasEditor/index.tsx - Added ResizeButton to toolbar
 
 **Tests:**
+
 - All existing tests pass (298 tests)
 - Build successful with no TypeScript errors
 - No regressions detected
 
 **UI Pattern:**
+
 - ResizeButton follows AddTextButton pattern (same styling, same toolbar position)
 - Modal follows FileUpload modal pattern (backdrop, centered dialog, close button)
 - Preset buttons auto-close modal after selection for better UX

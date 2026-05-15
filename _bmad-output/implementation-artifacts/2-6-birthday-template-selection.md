@@ -265,17 +265,18 @@ Story 2-8 telah mengimplementasikan canvas resize functionality dengan ResizeBut
 - **No special handling needed**: Template application tidak perlu logic khusus untuk resize - Fabric.js handles it
 
 **Implementation Detail:**
+
 ```typescript
 // In applyTemplate() action
 applyTemplate: (templateId: string) => {
   const template = getTemplate(templateId)
-  
+
   // Set canvas to template's initial size
   resizeCanvas(template.canvasWidth, template.canvasHeight)
-  
+
   // Apply template objects
   // ... (existing logic)
-  
+
   // User can then use ResizeButton to change canvas size
   // Objects will be preserved automatically by Fabric.js
 }
