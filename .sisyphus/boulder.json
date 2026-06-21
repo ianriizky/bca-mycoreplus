@@ -1,0 +1,45 @@
+{
+  "active_plan": "/Users/ianrizky/Sites/bca-mycoreplus/.sisyphus/plans/architecture-decision-document.md",
+  "started_at": "2026-05-09T15:25:20.592Z",
+  "session_ids": [
+    "ses_1f2a82b02ffeDa5Bneo0JJ0tZW",
+    "ses_1f29e20e9ffeYKdKoppAf6JJyI",
+    "ses_1f29068bdffeFKQ537dVtUWZ2H",
+    "ses_1f28e6f3cffekWoVvZOfydQpFR",
+    "ses_1f28e560affejf5681ahGS25OP",
+    "ses_1f28e41afffeh22rc4OAXmTwbH",
+    "ses_1f28e1a07ffec46vX7Vw06E9jY",
+    "ses_1f28df8ebffeuooszxJRkjd9Jh"
+  ],
+  "plan_name": "architecture-decision-document",
+  "worktree_path": null,
+  "session_origins": {
+    "ses_1f2a82b02ffeDa5Bneo0JJ0tZW": "direct",
+    "ses_1f29068bdffeFKQ537dVtUWZ2H": "direct",
+    "ses_1f28e6f3cffekWoVvZOfydQpFR": "appended",
+    "ses_1f28e560affejf5681ahGS25OP": "appended",
+    "ses_1f28e41afffeh22rc4OAXmTwbH": "appended",
+    "ses_1f28e1a07ffec46vX7Vw06E9jY": "appended",
+    "ses_1f28df8ebffeuooszxJRkjd9Jh": "appended"
+  },
+  "task_sessions": {
+    "todo:1": {
+      "task_key": "todo:1",
+      "task_label": "1",
+      "task_title": "Oracle Consultation - Technology Trade-offs Analysis",
+      "session_id": "ses_1f28e1a07ffec46vX7Vw06E9jY",
+      "agent": "librarian",
+      "updated_at": "2026-05-09T15:58:25.892Z"
+    },
+    "todo:6": {
+      "task_key": "todo:6",
+      "task_label": "6",
+      "task_title": "Technology Stack Decisions (Canvas Library, State Management)",
+      "session_id": "ses_1f2667de6ffe2bmDrCWkgPrXnj",
+      "agent": "Sisyphus-Junior",
+      "category": "deep",
+      "updated_at": "2026-05-09T16:37:12.020Z"
+    }
+  },
+  "agent": "atlas"
+}

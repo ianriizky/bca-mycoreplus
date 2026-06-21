@@ -1,0 +1,19 @@
+=== Task 1 QA: Scope Boundary Enforcement (Negative Test) ===
+
+Scenario: Scope Boundary Enforcement
+Tool: grep (negative assertion)
+Preconditions: UX Constraints Summary section written
+
+Step 1: Check for out-of-scope journeys (#1-3)
+This UX Design Specification documents the complete user experience design for BCA MyCore+ Journey #4 "Ucapan Selamat" (Congratulations Messages). The specification covers mobile-first design for a touch-optimized canvas editor enabling BCA staff to create personalized greeting cards for customers (birthdays, graduations, new businesses, achievements) with 3 entry points (Upload/Library/Blank), direct WhatsApp sharing, and Glassmorphism UI with BCA brand colors.
+- **Out of scope**: Journeys #1-3 (Pengumuman, Promosi, Edukasi)
+
+Step 2: Check for forbidden features (desktop-first, autosave, session recovery, brand warnings)
+- **No desktop-first patterns**: Desktop can be enhanced version later, not in scope
+- **No autosave**: No session recovery, no draft saving
+- **No autosave**: Manual undo/redo only, no automatic state recovery
+- **No brand warnings**: Full freedom to customize, no compliance warnings
+- No draft saving: All changes lost on exit (no session recovery)
+
+=== RESULT ===
+Empty grep output (exit code 1) - no out-of-scope content detected
